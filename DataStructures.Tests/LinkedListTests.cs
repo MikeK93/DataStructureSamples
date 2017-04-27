@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Linq;
+using DataStructures.LinkedList;
 using FluentAssert;
 using NUnit.Framework;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
@@ -78,6 +81,64 @@ namespace DataStructures.Tests
 
             // assert
             list.Length.ShouldBeEqualTo(1);
+        }
+
+        #endregion
+
+        #region AddAt
+
+        [Test]
+        public void AddAt_ShouldThrow_WhenIndexIsOutOfRange()
+        {
+            // arrange
+            var list = new LinkedList<int> { 100, 200, 300 };
+
+            // act
+            var actual = Assert.ThrowsException<ArgumentOutOfRangeException>(() => list.AddAt(100, 400));
+
+            // assert
+            actual.Message.ShouldBeEqualTo("Index [100] must be between [0] and [3].\r\nParameter name: index\r\nActual value was 100.");
+        }
+
+        [TestCaseSource(nameof(AddAtTestCaseSource))]
+        public void AddAt_ShouldAddElementAtPosition_WhenPassedCorrectIndex(int position, string expected)
+        {
+            // arrange
+            var list = new LinkedList<string> { "e", "p", "m" };
+
+            // act
+            list.AddAt(position, "a");
+
+            var actual = list.Aggregate(string.Empty, (current, node) => current + node.Item);
+
+            // assert
+            actual.ShouldBeEqualTo(expected);
+        }
+        private static IEnumerable AddAtTestCaseSource()
+        {
+            yield return new TestCaseData(0, "aepm");
+            yield return new TestCaseData(2, "epam");
+            yield return new TestCaseData(3, "epma");
+        }
+
+        #endregion
+
+        #region Remove
+
+        [Test]
+        public void Remove_ShouldDoNothing_WhenElementWasNotFound()
+        {
+            // arrange
+            // act
+            // assert
+        }
+
+        [Test]
+        public void Remove_ShouldRemoveElement_WhenElementExistsInList()
+        {
+            // arrange
+            // act
+            // assert
         }
 
         #endregion

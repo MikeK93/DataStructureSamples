@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DataStructures.LinkedList
 {
@@ -10,23 +9,56 @@ namespace DataStructures.LinkedList
         private Node<T> _head;
         private Node<T> _tale;
 
-        public int Length => this.Count();
+        public int Length { get; private set; }
 
         public void Add(T item)
         {
+            Length++;
+
             if (_head == null)
             {
                 _tale = _head = new Node<T>(item);
                 return;
             }
-            
-            _tale.Next = new Node<T>(item);
-            _tale = _tale.Next;
+
+            _tale =_tale.Next = new Node<T>(item);
         }
 
-        public void AddAt(int index)
+        public void AddAt(int index, T item)
         {
-            throw new NotImplementedException();
+            if (index < 0 || index > Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index), index, $"Index [{index}] must be between [0] and [{Length}].");
+            }
+
+            if (index == Length)
+            {
+                _tale = _tale.Next = new Node<T>(item);
+                Length++;
+                return;
+            }
+            
+            var previous = _head;
+            foreach (var node in this)
+            {
+                if (index == 0)
+                {
+                    var newNode = new Node<T>(item, node);
+                    if (previous != _head)
+                    {
+                        previous.Next = newNode;
+                    }
+                    else
+                    {
+                        _head = newNode;
+                    }
+
+                    Length++;
+                    break;
+                }
+                previous = node;
+                index--;
+            }
         }
 
         public void Remove(T item)
@@ -46,14 +78,13 @@ namespace DataStructures.LinkedList
                 throw new ArgumentException($"Invalid index [{index}].");
             }
 
-            var position = 0;
             foreach (var node in this)
             {
-                if (position == index)
+                if (index == 0)
                 {
                     return node;
                 }
-                position++;
+                index--;
             }
 
             return null;
