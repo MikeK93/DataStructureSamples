@@ -26,10 +26,7 @@ namespace DataStructures.LinkedList
 
         public void AddAt(int index, T item)
         {
-            if (index < 0 || index > Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), index, $"Index [{index}] must be between [0] and [{Length}].");
-            }
+            ValidateIndex(index, Length);
 
             if (index == Length)
             {
@@ -75,33 +72,34 @@ namespace DataStructures.LinkedList
                 }
 
                 Length--;
-
-                if (current.Equals(previous))
-                {
-                    _head = current.Next;
-                    break;
-                }
-
-                previous.Next = current.Next;
-                if (previous.Next == null)
-                {
-                    _tale = previous;
-                }
+                
+                RemoveNode(current, previous);
                 break;
             }
         }
 
         public void RemoveAt(int index)
         {
-            throw new NotImplementedException();
+            ValidateIndex(index, Length - 1);
+            
+            var previous = _head;
+            foreach (var current in this)
+            {
+                if (index != 0)
+                {
+                    index--;
+                    previous = current;
+                    continue;
+                }
+
+                RemoveNode(current, previous);
+                break;
+            }
         }
 
         public Node<T> ElementAt(int index)
         {
-            if (index < 0 || index > Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), index, $"Index [{index}] must be between [0] and [{Length}].");
-            }
+            ValidateIndex(index, Length);
 
             foreach (var node in this)
             {
@@ -132,6 +130,29 @@ namespace DataStructures.LinkedList
             {
                 yield return enumerator;
                 enumerator = enumerator.Next;
+            }
+        }
+
+        private void RemoveNode(Node<T> current, Node<T> previous)
+        {
+            if (current.Equals(previous))
+            {
+                _head = current.Next;
+                return;
+            }
+
+            previous.Next = current.Next;
+            if (previous.Next == null)
+            {
+                _tale = previous;
+            }
+        }
+
+        private void ValidateIndex(int index, int maxIndex)
+        {
+            if (index < 0 || index > Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index), index, $"Index [{index}] must be between [0] and [{maxIndex}].");
             }
         }
     }
