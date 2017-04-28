@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using DataStructures.LinkedList;
 
 namespace DataStructures
 {
@@ -9,10 +10,40 @@ namespace DataStructures
         {
             StackDemo();
             QueueDemo();
+            LinkedListDemo();
 
             Console.WriteLine();
             Console.WriteLine("Press any key to exit...");
             Console.ReadLine();
+        }
+
+        private static void LinkedListDemo()
+        {
+            Console.WriteLine($"\n*** {nameof(LinkedListDemo)} ***\n");
+
+            var toDoList = new LinkedList<string>();
+
+            toDoList.Add("Buy milk");
+            toDoList.Add("Feed a cat");
+            toDoList.AddAt(0, "Study C#");
+
+            Console.WriteLine($"There are {toDoList.Length} things to do:");
+            foreach (var node in toDoList)
+            {
+                Console.WriteLine($"\t-{node.Item};");
+            }
+
+            Console.WriteLine($"\n{toDoList.ElementAt(0).Item} is done!");
+            Console.WriteLine($"{toDoList.ElementAt(2).Item} is done!");
+
+            toDoList.Remove("Buy milk");
+            toDoList.RemoveAt(1);
+            
+            Console.WriteLine($"\n{toDoList.Length} things left to do:");
+            foreach (var node in toDoList)
+            {
+                Console.WriteLine($"\t-{node.Item}");
+            }
         }
 
         private static void QueueDemo()

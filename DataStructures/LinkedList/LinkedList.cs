@@ -71,8 +71,6 @@ namespace DataStructures.LinkedList
                     continue;
                 }
 
-                Length--;
-                
                 RemoveNode(current, previous);
                 break;
             }
@@ -135,6 +133,8 @@ namespace DataStructures.LinkedList
 
         private void RemoveNode(Node<T> current, Node<T> previous)
         {
+            Length--;
+
             if (current.Equals(previous))
             {
                 _head = current.Next;

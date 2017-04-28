@@ -180,7 +180,7 @@ namespace DataStructures.Tests
             var actual = list.Aggregate(string.Empty, (item, node) => item + node.Item);
 
             // assert
-            list.Length.ShouldBeEqualTo(4);
+            list.Length.ShouldBeEqualTo(3);
             actual.ShouldBeEqualTo(expected);
         }
 
