@@ -21,7 +21,7 @@ namespace DataStructures.LinkedList
                 return;
             }
 
-            _tale =_tale.Next = new Node<T>(item);
+            _tale = _tale.Next = new Node<T>(item);
         }
 
         public void AddAt(int index, T item)
@@ -34,36 +34,61 @@ namespace DataStructures.LinkedList
             if (index == Length)
             {
                 _tale = _tale.Next = new Node<T>(item);
-                Length++;
-                return;
             }
-            
-            var previous = _head;
-            foreach (var node in this)
+            else
             {
-                if (index == 0)
+                var previous = _head;
+                foreach (var current in this)
                 {
-                    var newNode = new Node<T>(item, node);
-                    if (previous != _head)
+                    if (index != 0)
                     {
-                        previous.Next = newNode;
-                    }
-                    else
-                    {
-                        _head = newNode;
+                        previous = current;
+                        index--;
+                        continue;
                     }
 
-                    Length++;
+                    var node = new Node<T>(item, current);
+                    if (previous == current)
+                    {
+                        _head = node;
+                        break;
+                    }
+
+                    previous.Next = node;
                     break;
                 }
-                previous = node;
-                index--;
             }
+
+            Length++;
         }
 
         public void Remove(T item)
         {
-            throw new NotImplementedException();
+            var previous = _head;
+
+            foreach (var current in this)
+            {
+                if (!current.Item.Equals(item))
+                {
+                    previous = current;
+                    continue;
+                }
+
+                Length--;
+
+                if (current.Equals(previous))
+                {
+                    _head = current.Next;
+                    break;
+                }
+
+                previous.Next = current.Next;
+                if (previous.Next == null)
+                {
+                    _tale = previous;
+                }
+                break;
+            }
         }
 
         public void RemoveAt(int index)
@@ -73,9 +98,9 @@ namespace DataStructures.LinkedList
 
         public Node<T> ElementAt(int index)
         {
-            if (index < 0)
+            if (index < 0 || index > Length)
             {
-                throw new ArgumentException($"Invalid index [{index}].");
+                throw new ArgumentOutOfRangeException(nameof(index), index, $"Index [{index}] must be between [0] and [{Length}].");
             }
 
             foreach (var node in this)
