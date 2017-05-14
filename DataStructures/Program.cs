@@ -11,7 +11,7 @@ namespace DataStructures
             StackDemo();
             QueueDemo();
             LinkedListDemo();
-
+            
             Console.WriteLine();
             Console.WriteLine("Press any key to exit...");
             Console.ReadLine();
@@ -28,9 +28,9 @@ namespace DataStructures
             toDoList.AddAt(0, "Study C#");
 
             Console.WriteLine($"There are {toDoList.Length} things to do:");
-            foreach (var node in toDoList)
+            foreach (var item in toDoList)
             {
-                Console.WriteLine($"\t-{node.Item};");
+                Console.WriteLine($"\t-{item};");
             }
 
             Console.WriteLine($"\n{toDoList.ElementAt(0).Item} is done!");
@@ -40,9 +40,9 @@ namespace DataStructures
             toDoList.RemoveAt(1);
             
             Console.WriteLine($"\n{toDoList.Length} things left to do:");
-            foreach (var node in toDoList)
+            foreach (var item in toDoList)
             {
-                Console.WriteLine($"\t-{node.Item}");
+                Console.WriteLine($"\t-{item}");
             }
         }
 

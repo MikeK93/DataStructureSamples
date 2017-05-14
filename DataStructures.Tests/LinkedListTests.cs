@@ -105,7 +105,7 @@ namespace DataStructures.Tests
             // act
             list.AddAt(position, "a");
 
-            var actual = list.Aggregate(string.Empty, (current, node) => current + node.Item);
+            var actual = list.Aggregate(string.Empty, String.Concat);
 
             // assert
             actual.ShouldBeEqualTo(expected);
@@ -139,7 +139,7 @@ namespace DataStructures.Tests
 
             // act
             list.Remove(toRemove);
-            var actual = list.Aggregate(string.Empty, (item, node) => item + node.Item);
+            var actual = list.Aggregate(string.Empty, String.Concat);
 
             // assert
             actual.ShouldBeEqualTo(expected);
@@ -177,8 +177,8 @@ namespace DataStructures.Tests
 
             // act
             list.RemoveAt(index);
-            var actual = list.Aggregate(string.Empty, (item, node) => item + node.Item);
-
+            var actual = list.Aggregate(string.Empty, String.Concat);
+            
             // assert
             list.Length.ShouldBeEqualTo(3);
             actual.ShouldBeEqualTo(expected);
