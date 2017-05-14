@@ -26,7 +26,7 @@ namespace DataStructures
             toDoList.Add("Buy milk");
             toDoList.Add("Feed a cat");
             toDoList.AddAt(0, "Study C#");
-
+            
             Console.WriteLine($"There are {toDoList.Length} things to do:");
             foreach (var item in toDoList)
             {
@@ -35,7 +35,7 @@ namespace DataStructures
 
             Console.WriteLine($"\n{toDoList.ElementAt(0).Item} is done!");
             Console.WriteLine($"{toDoList.ElementAt(2).Item} is done!");
-
+            
             toDoList.Remove("Buy milk");
             toDoList.RemoveAt(1);
             

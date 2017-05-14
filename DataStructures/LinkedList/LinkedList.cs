@@ -1,10 +1,11 @@
-﻿using System;
+﻿using DataStructures.Contracts;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace DataStructures.LinkedList
 {
-    public class LinkedList<T> : IEnumerable<T>
+    public class LinkedList<T> : ILinkedList<T>
     {
         private Node<T> _head;
         private Node<T> _tale;
@@ -53,11 +54,9 @@ namespace DataStructures.LinkedList
         public void Remove(T item)
         {
             var previous = _head;
-
             for (int i = 0; i < Length; i++)
             {
                 var node = _head.ElementAt(i);
-
                 if (node.Item.Equals(item))
                 {
                     RemoveNode(i, previous);

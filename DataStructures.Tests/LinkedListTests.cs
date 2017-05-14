@@ -4,6 +4,7 @@ using System.Linq;
 using DataStructures.LinkedList;
 using FluentAssert;
 using NUnit.Framework;
+using DataStructures.Contracts;
 
 namespace DataStructures.Tests
 {
@@ -16,7 +17,7 @@ namespace DataStructures.Tests
         public void ElementAt_ShouldThrow_WhenIndexIsOutOfRange()
         {
             // arrange
-            var list = new LinkedList<string>();
+            ILinkedList<string> list = new LinkedList<string>();
 
             // act
             var actual = Assert.Throws<ArgumentOutOfRangeException>(() => list.ElementAt(-1));
@@ -29,7 +30,7 @@ namespace DataStructures.Tests
         public void ElementAt_ShouldReturnCorrectElement_WhenIndexIsValid()
         {
             // arrange
-            var list = new LinkedList<int> { 100, 200, 300, 400 };
+            ILinkedList<int> list = new LinkedList<int> { 100, 200, 300, 400 };
 
             // act
             var actual = list.ElementAt(1);
@@ -46,7 +47,7 @@ namespace DataStructures.Tests
         public void Lengh_ShouldReturnCorrectValue_WhenEmptyList()
         {
             // arrange
-            var list = new LinkedList<string>();
+            ILinkedList<string> list = new LinkedList<string>();
 
             // assert
             list.Length.ShouldBeEqualTo(0);
@@ -56,7 +57,7 @@ namespace DataStructures.Tests
         public void Lengh_ShouldReturnCorrectValue_WhenOneItemAdded()
         {
             // arrange & act
-            var list = new LinkedList<string> { "Mike" };
+            ILinkedList<string> list = new LinkedList<string> { "Mike" };
 
             // assert
             list.Length.ShouldBeEqualTo(1);
@@ -70,7 +71,7 @@ namespace DataStructures.Tests
         public void Add_ShouldAddElementAndReturn()
         {
             // arrange
-            var list = new LinkedList<string>();
+            ILinkedList<string> list = new LinkedList<string>();
 
             // act
             list.Add("Mike");
@@ -87,7 +88,7 @@ namespace DataStructures.Tests
         public void AddAt_ShouldThrow_WhenIndexIsOutOfRange()
         {
             // arrange
-            var list = new LinkedList<int> { 100, 200, 300 };
+            ILinkedList<int> list = new LinkedList<int> { 100, 200, 300 };
 
             // act
             var actual = Assert.Throws<ArgumentOutOfRangeException>(() => list.AddAt(100, 400));
@@ -100,7 +101,7 @@ namespace DataStructures.Tests
         public void AddAt_ShouldAddElementAtPosition(int position, string expected)
         {
             // arrange
-            var list = new LinkedList<string> { "e", "p", "m" };
+            ILinkedList<string> list = new LinkedList<string> { "e", "p", "m" };
 
             // act
             list.AddAt(position, "a");
@@ -125,7 +126,7 @@ namespace DataStructures.Tests
         public void Remove_ShouldDoNothing_WhenElementWasNotFound()
         {
             // arrange
-            var list = new LinkedList<int> { 1, 2 };
+            ILinkedList<int> list = new LinkedList<int> { 1, 2 };
 
             // act & assert
             Assert.DoesNotThrow(() => list.Remove(10));
@@ -135,7 +136,7 @@ namespace DataStructures.Tests
         public void Remove_ShouldRemoveElement(string toRemove, string expected)
         {
             // arrange
-            var list = new LinkedList<string> { "e", "p", "a", "m" };
+            ILinkedList<string> list = new LinkedList<string> { "e", "p", "a", "m" };
 
             // act
             list.Remove(toRemove);
@@ -160,7 +161,7 @@ namespace DataStructures.Tests
         public void RemoveAt_ShouldThrow_WhenIndexIsOutOfRange()
         {
             // arrange
-            var list = new LinkedList<string> { "a", "b" };
+            ILinkedList<string> list = new LinkedList<string> { "a", "b" };
 
             // act
             var actual = Assert.Throws<ArgumentOutOfRangeException>(() => list.RemoveAt(100));
@@ -173,7 +174,7 @@ namespace DataStructures.Tests
         public void RemoveAt_ShouldRemoveElementAtPosition(int index, string expected)
         {
             // arrange
-            var list = new LinkedList<string> { "A", "B", "C", "D" };
+            ILinkedList<string> list = new LinkedList<string> { "A", "B", "C", "D" };
 
             // act
             list.RemoveAt(index);

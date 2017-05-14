@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using DataStructures.Contracts;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace DataStructures
 {
-    internal class Stack<T> : IEnumerable<T>
+    public class Stack<T> : IStack<T>
     {
         private readonly LinkedList<T> _nodes = new LinkedList<T>();
 
@@ -22,7 +24,7 @@ namespace DataStructures
             var first = _nodes.First;
             if (first == null)
             {
-                return default(T);
+                throw new InvalidOperationException("No elements in a stack.");
             }
 
             _nodes.Remove(first);
@@ -34,7 +36,7 @@ namespace DataStructures
             var first = _nodes.First;
             if (first == null)
             {
-                return default(T);
+                throw new InvalidOperationException("No elements in a stack.");
             }
 
             return first.Value;
