@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using DataStructures.Contracts;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace DataStructures
 {
-    internal class Queue<T> : IEnumerable<T>
+    public class Queue<T> : IQueue<T>
     {
         private readonly LinkedList<T> _list = new LinkedList<T>();
 
@@ -22,7 +24,7 @@ namespace DataStructures
             var first = _list.First;
             if (first == null)
             {
-                return default(T);
+                throw new InvalidOperationException("No elements in a queue.");
             }
 
             _list.Remove(first);
