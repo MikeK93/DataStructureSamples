@@ -37,18 +37,18 @@ namespace DataStructures.LinkedList
             if (index == 0)
             {
                 _head = new Node<T>(item, _head);
+                Length++;
+                return;
             }
-            else if (index == Length)
+
+            if (index == Length)
             {
                 Add(item);
                 return;
             }
-            else
-            {
-                var previous = _head.ElementAt(index - 1);
-                previous.Next = new Node<T>(item, previous.Next);
-            }
 
+            var previous = ElementAt(index - 1, _head);
+            previous.Next = new Node<T>(item, previous.Next);
             Length++;
         }
 
@@ -57,7 +57,7 @@ namespace DataStructures.LinkedList
             var previous = _head;
             for (int i = 0; i < Length; i++)
             {
-                var node = _head.ElementAt(i);
+                var node = ElementAt(i, _head);
                 if (node.Item.Equals(item))
                 {
                     RemoveNode(i, previous);
@@ -75,11 +75,11 @@ namespace DataStructures.LinkedList
             RemoveNode(index);
         }
 
-        public Node<T> ElementAt(int index)
+        public T ElementAt(int index)
         {
             ValidateIndex(index, Length);
 
-            return _head.ElementAt(index);
+            return ElementAt(index, _head).Item;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -110,7 +110,7 @@ namespace DataStructures.LinkedList
             }
             else
             {
-                previous = previous ?? _head.ElementAt(index - 1);
+                previous = previous ?? ElementAt(index - 1, _head);
 
                 if (index == Length - 1)
                 {
@@ -124,6 +124,21 @@ namespace DataStructures.LinkedList
             }
 
             Length--;
+        }
+
+        private static Node<T> ElementAt(int index, Node<T> node)
+        {
+            if (index < 0 || (index != 0 && node.Next == null))
+            {
+                return null;
+            }
+
+            if (index == 0)
+            {
+                return node;
+            }
+
+            return ElementAt(index - 1, node.Next);
         }
 
         private void ValidateIndex(int index, int maxIndex)

@@ -36,7 +36,7 @@ namespace DataStructures.Tests
             var actual = list.ElementAt(1);
 
             // assert
-            actual.Item.ShouldBeEqualTo(200);
+            actual.ShouldBeEqualTo(200);
         }
 
         #endregion

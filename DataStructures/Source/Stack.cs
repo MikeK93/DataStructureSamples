@@ -14,6 +14,7 @@ namespace DataStructures
             if (_nodes.Count == 0)
             {
                 _nodes.AddFirst(item);
+                return;
             }
 
             _nodes.AddBefore(_nodes.First, item);
@@ -51,9 +52,11 @@ namespace DataStructures
 
         public IEnumerator<T> GetEnumerator()
         {
-            while (_nodes.Count != 0)
+            var enumerable = _nodes.First;
+            while (enumerable != null)
             {
-                yield return Pop();
+                yield return enumerable.Value;
+                enumerable = enumerable.Next;
             }
         }
     }

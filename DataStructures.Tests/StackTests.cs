@@ -2,6 +2,7 @@
 using FluentAssert;
 using NUnit.Framework;
 using System;
+using System.Linq;
 
 namespace DataStructures.Tests
 {
@@ -27,7 +28,7 @@ namespace DataStructures.Tests
             var actual = _stack.Pop();
 
             // assert
-            _stack.Count.ShouldBeEqualTo(1);
+            _stack.Count.ShouldBeEqualTo(0);
             actual.ShouldBeEqualTo(expected);
         }
 
@@ -89,5 +90,21 @@ namespace DataStructures.Tests
         }
 
         #endregion
+
+        [Test]
+        public void IEnumerableImplementation_CanIterateOverStack()
+        {
+            // arrange 
+            _stack.Push("A");
+            _stack.Push("B");
+            _stack.Push("C");
+
+            // act
+            var actual = _stack.Aggregate(String.Empty, String.Concat);
+
+            // arrange
+            actual.ShouldBeEqualTo("CBA");
+            _stack.Count.ShouldBeEqualTo(3);
+        }
     }
 }

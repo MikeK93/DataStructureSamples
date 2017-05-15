@@ -4,7 +4,7 @@ namespace DataStructures.Contracts
 {
     public interface IQueue<T> : IEnumerable<T>
     {
-        T Enqueue(T item);
+        void Enqueue(T item);
         T Dequeue();
         int Count { get; }
     }

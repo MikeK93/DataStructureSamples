@@ -3,6 +3,7 @@ using NUnit.Framework;
 using FluentAssert;
 using DataStructures.Contracts;
 using System;
+using System.Linq;
 
 namespace DataStructures.Tests
 {
@@ -57,5 +58,21 @@ namespace DataStructures.Tests
         }
 
         #endregion
+
+        [Test]
+        public void IEnumerableImplementation_ShouldBeAbleToIterateOverQueue()
+        {
+            // arrange
+            _queue.Enqueue("A");
+            _queue.Enqueue("B");
+            _queue.Enqueue("C");
+
+            // act
+            var actual = _queue.Aggregate(String.Empty, String.Concat);
+
+            // assert
+            actual.ShouldBeEqualTo("ABC");
+            _queue.Count.ShouldBeEqualTo(3);
+        }
     }
 }
