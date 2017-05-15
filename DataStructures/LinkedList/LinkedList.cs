@@ -14,41 +14,42 @@ namespace DataStructures.LinkedList
 
         public void Add(T item)
         {
-            Length++;
-
             var node = new Node<T>(item);
 
             if (_head == null)
             {
                 _head = node;
                 _tale = node;
-                return;
+            }
+            else
+            {
+                _tale.Next = node;
+                _tale = node;
             }
 
-            _tale.Next = node;
-            _tale = node;
+            Length++;
         }
 
         public void AddAt(int index, T item)
         {
             ValidateIndex(index, Length);
 
-            Length++;
-
             if (index == 0)
             {
                 _head = new Node<T>(item, _head);
-                return;
             }
-
-            if (index == Length)
+            else if (index == Length)
             {
                 Add(item);
                 return;
             }
+            else
+            {
+                var previous = _head.ElementAt(index - 1);
+                previous.Next = new Node<T>(item, previous.Next);
+            }
 
-            var previous = _head.ElementAt(index - 1);
-            previous.Next = new Node<T>(item, previous.Next);
+            Length++;
         }
 
         public void Remove(T item)
