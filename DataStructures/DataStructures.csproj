@@ -47,7 +47,7 @@
     <Compile Include="Contracts\IQueue.cs" />
     <Compile Include="Contracts\IStack.cs" />
     <Compile Include="Source\HashTable\HashTable.cs" />
-    <Compile Include="Source\HashTable\Node.cs" />
+    <Compile Include="Source\HashTable\Entry.cs" />
     <Compile Include="Source\LinkedList\LinkedList.cs" />
     <Compile Include="Source\LinkedList\Node.cs" />
     <Compile Include="Program.cs" />

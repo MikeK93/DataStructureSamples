@@ -2,7 +2,7 @@
 
 namespace DataStructures.Contracts
 {
-    public interface IHashTable : IEnumerable
+    public interface IHashTable// : IEnumerable
     {
         bool Contains(object key);
         void Add(object key, object value);
