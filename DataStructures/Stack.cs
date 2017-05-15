@@ -9,14 +9,14 @@ namespace DataStructures
     {
         private readonly LinkedList<T> _nodes = new LinkedList<T>();
 
-        public T Push(T item)
+        public void Push(T item)
         {
             if (_nodes.Count == 0)
             {
-                return _nodes.AddFirst(item).Value;
+                _nodes.AddFirst(item);
             }
 
-            return _nodes.AddBefore(_nodes.First, item).Value;
+            _nodes.AddBefore(_nodes.First, item);
         }
 
         public T Pop()

@@ -23,7 +23,8 @@ namespace DataStructures.Tests
             var expected = "Yes";
 
             // act
-            var actual = _stack.Push(expected);
+            _stack.Push(expected);
+            var actual = _stack.Pop();
 
             // assert
             _stack.Count.ShouldBeEqualTo(1);
