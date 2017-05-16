@@ -1,14 +1,14 @@
 ﻿namespace DataStructures.Source.HashTable
 {
-    public class Entry
+    public class Entry<TKey, TValue>
     {
-        public Entry(object key, object value)
+        public Entry(TKey key, TValue value)
         {
             Key = key;
             Value = value;
         }
 
-        public object Key { get; }
-        public object Value { get; set; }
+        public TKey Key { get; }
+        public TValue Value { get; set; }
     }
 }

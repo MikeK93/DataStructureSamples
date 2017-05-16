@@ -1,26 +1,28 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using DataStructures.Contracts;
-using DataStructures.LinkedList;
 
 namespace DataStructures.Source.HashTable
 {
-    public class HashTable : IHashTable
+    public class HashTable<TKey, TValue> : IHashTable<TKey, TValue>
     {
         private const double LoadFactorThreshold = 0.9;
-        private int _count;
-        private ILinkedList<Entry>[] _entries;
+        private ILinkedList<Entry<TKey, TValue>>[] _entries;
 
         public HashTable()
         {
-            _entries = new LinkedList<Entry>[15];
+            _entries = new LinkedList.LinkedList<Entry<TKey, TValue>>[15];
         }
 
-        public object this[object key]
+        public int Count { get; private set; }
+
+        public TValue this[TKey key]
         {
             get
             {
-                if (TryGet(key, out object value))
+                if (TryGet(key, out TValue value))
                 {
                     return value;
                 }
@@ -33,17 +35,17 @@ namespace DataStructures.Source.HashTable
             }
         }
 
-        public void Add(object key, object value)
+        public void Add(TKey key, TValue value)
         {
             AddOrUpdate(key, value, false);
         }
 
-        public bool TryGet(object key, out object value)
+        public bool TryGet(TKey key, out TValue value)
         {
             var entry = GetBucket(key, _entries).FirstOrDefault(x => x.Key.Equals(key));
             if (entry == null)
             {
-                value = null;
+                value = default(TValue);
                 return false;
             }
 
@@ -51,20 +53,47 @@ namespace DataStructures.Source.HashTable
             return true;
         }
 
-        public bool Contains(object key)
+        public bool Contains(TKey key)
         {
             return GetBucket(key, _entries).Any(entry => entry.Key.Equals(key));
         }
 
-        private void AddOrUpdate(object key, object value, bool updatable)
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public IEnumerator<Entry<TKey, TValue>> GetEnumerator()
+        {
+            if (Count == 0)
+            {
+                yield break;
+            }
+
+            for (int i = 0; i < _entries.Length; i++)
+            {
+                var bucket = _entries[i];
+                if (bucket == null)
+                {
+                    continue;
+                }
+
+                foreach (var entry in bucket)
+                {
+                    yield return entry;
+                }
+            }
+        }
+
+        private void AddOrUpdate(TKey key, TValue value, bool updatable)
         {
             var bucket = GetBucket(key, _entries);
             var entry = bucket.FirstOrDefault(x => x.Key.Equals(key));
             if (entry == null)
             {
-                bucket.Add(new Entry(key, value));
-                _count++;
-                if ((double)_count / _entries.Length > LoadFactorThreshold)
+                bucket.Add(new Entry<TKey, TValue>(key, value));
+                Count++;
+                if ((double)Count / _entries.Length > LoadFactorThreshold)
                 {
                     Resize();
                 }
@@ -79,7 +108,7 @@ namespace DataStructures.Source.HashTable
             if (value == null)
             {
                 bucket.Remove(entry);
-                _count--;
+                Count--;
                 return;
             }
 
@@ -88,10 +117,11 @@ namespace DataStructures.Source.HashTable
 
         private void Resize()
         {
-            _count = 0;
-            var resizedEntries = new LinkedList<Entry>[_entries.Length * 2];
-            foreach (var list in _entries)
+            var resizedEntries = new LinkedList.LinkedList<Entry<TKey, TValue>>[_entries.Length * 2];
+
+            for (var i = 0; i < _entries.Length; i++)
             {
+                var list = _entries[i];
                 if (list == null)
                 {
                     continue;
@@ -101,25 +131,26 @@ namespace DataStructures.Source.HashTable
                 {
                     var bucket = GetBucket(entry.Key, resizedEntries);
                     bucket.Add(entry);
-                    _count++;
                 }
             }
+
+            _entries = resizedEntries;
         }
 
-        private static ILinkedList<Entry> GetBucket(object key, ILinkedList<Entry>[] buckets)
+        private static ILinkedList<Entry<TKey, TValue>> GetBucket(TKey key, ILinkedList<Entry<TKey, TValue>>[] buckets)
         {
             var index = GetBucketIndex(key, buckets.Length);
             var bucket = buckets[index];
             if (bucket == null)
             {
-                bucket = new LinkedList<Entry>();
+                bucket = new LinkedList.LinkedList<Entry<TKey, TValue>>();
                 buckets[index] = bucket;
             }
 
             return bucket;
         }
 
-        private static int GetBucketIndex(object key, int length)
+        private static int GetBucketIndex(TKey key, int length)
         {
             return Math.Abs(127 * key.GetHashCode() + 1) % 16908799 % (length - 1);
         }

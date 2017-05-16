@@ -3,6 +3,7 @@ using DataStructures.Contracts;
 using DataStructures.Source.HashTable;
 using FluentAssert;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace DataStructures.Tests
 {
@@ -12,12 +13,12 @@ namespace DataStructures.Tests
         private const string Key = "key";
         private const string Value = "value";
 
-        private IHashTable _hashTable;
+        private IHashTable<string, string> _hashTable;
 
         [SetUp]
         public void SetUp()
         {
-            _hashTable = new HashTable();
+            _hashTable = new HashTable<string, string>();
         }
 
         #region Contains
@@ -152,12 +153,12 @@ namespace DataStructures.Tests
             _hashTable.Add(Key, Value);
 
             // act
-            var actual = _hashTable.TryGet("invalid key", out object value);
+            var actual = _hashTable.TryGet("invalid key", out string value);
 
             // assert
             actual.ShouldBeFalse();
         }
-
+        
         [Test]
         public void TryGet_ShouldReturnTrueAndSetOutParameter_WhenKeyExists()
         {
@@ -165,7 +166,7 @@ namespace DataStructures.Tests
             _hashTable.Add(Key, Value);
 
             // act
-            var actual = _hashTable.TryGet(Key, out object value);
+            var actual = _hashTable.TryGet(Key, out string value);
 
             // assert
             actual.ShouldBeTrue();
@@ -173,5 +174,34 @@ namespace DataStructures.Tests
         }
 
         #endregion
+
+        [Test]
+        public void IEnumerableImplementation_ShouldBeAbleToIterateOverTable()
+        {
+            // arrange
+            var items = new Entry<string, string>[]
+            {
+                new Entry<string, string>("key1", "value1"),
+                new Entry<string, string>("key2", "value2"),
+                new Entry<string, string>("key3", "value3"),
+                new Entry<string, string>("key4", "value4")
+            };
+
+            foreach (var item in items)
+            {
+                _hashTable.Add(item.Key, item.Value);
+            }
+
+            // act
+            var actual = new List<Entry<string, string>>();
+            foreach (var item in _hashTable)
+            {
+                actual.Add(item);
+            }
+
+            // assert
+            actual.Count.ShouldBeEqualTo(4);
+            actual.TrueForAll(entry => _hashTable.Contains(entry.Key)).ShouldBeTrue();
+        }
     }
 }

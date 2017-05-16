@@ -1,12 +1,14 @@
-﻿using System.Collections;
+﻿using DataStructures.Source.HashTable;
+using System.Collections.Generic;
 
 namespace DataStructures.Contracts
 {
-    public interface IHashTable// : IEnumerable
+    public interface IHashTable<TKey, TValue> : IEnumerable<Entry<TKey, TValue>>
     {
-        bool Contains(object key);
-        void Add(object key, object value);
-        object this[object key] { get; set; }
-        bool TryGet(object key, out object value);
+        bool Contains(TKey key);
+        void Add(TKey key, TValue value);
+        TValue this[TKey key] { get; set; }
+        bool TryGet(TKey key, out TValue value);
+        int Count { get; }
     }
 }
