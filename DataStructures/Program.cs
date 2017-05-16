@@ -67,9 +67,11 @@ namespace DataStructures
 
             var emergencyCalls = new Stack<string>();
 
-            Console.WriteLine($@"- {emergencyCalls.Push("Mike")} has arrived at {DateTime.Now.ToLongTimeString()}!");
+            emergencyCalls.Push("Mike");
+            Console.WriteLine($@"- Mike has arrived at {DateTime.Now.ToLongTimeString()}!");
             Thread.Sleep(1000);
-            Console.WriteLine($@"- {emergencyCalls.Push("Lisa")} has arrived at {DateTime.Now.ToLongTimeString()}!");
+            emergencyCalls.Push("Lisa");
+            Console.WriteLine($@"- Lisa has arrived at {DateTime.Now.ToLongTimeString()}!");
             Console.WriteLine();
 
             Console.WriteLine($"Who's next?\n- {emergencyCalls.Peek()}");
