@@ -49,4 +49,5 @@ bin
 obj
 bin
 obj
-.vs/DataStructures/v15/.suo
+.vs
+packages
