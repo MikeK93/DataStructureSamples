@@ -50,5 +50,5 @@ obj
 bin
 obj
 .vs
-packages
+packages/**/*
 *.suo

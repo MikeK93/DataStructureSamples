@@ -93,10 +93,7 @@ namespace DataStructures.Source.HashTable
             {
                 bucket.Add(new Entry<TKey, TValue>(key, value));
                 Count++;
-                if ((double)Count / _entries.Length > LoadFactorThreshold)
-                {
-                    Resize();
-                }
+                TryResize();
                 return;
             }
 
@@ -115,8 +112,13 @@ namespace DataStructures.Source.HashTable
             entry.Value = value;
         }
 
-        private void Resize()
+        private void TryResize()
         {
+            if ((double)Count / _entries.Length < LoadFactorThreshold)
+            {
+                return;
+            }
+
             var resizedEntries = new LinkedList.LinkedList<Entry<TKey, TValue>>[_entries.Length * 2];
 
             for (var i = 0; i < _entries.Length; i++)
