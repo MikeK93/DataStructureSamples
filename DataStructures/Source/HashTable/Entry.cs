@@ -8,7 +8,7 @@
             Value = value;
         }
 
-        public object Key { get; private set; }
+        public object Key { get; }
         public object Value { get; set; }
     }
 }

@@ -44,13 +44,15 @@ namespace DataStructures.Tests
         #region Add
 
         [Test]
-        public void Add_ShouldAddElementToTable()
+        public void Add_ShouldAddElementsToTable()
         {
             // act
             _hashTable.Add(Key, Value);
+            _hashTable.Add("Key2", Value);
 
             // assert
             _hashTable.Contains(Key).ShouldBeTrue();
+            _hashTable.Contains("Key2").ShouldBeTrue();
         }
 
         [Test]
@@ -63,7 +65,111 @@ namespace DataStructures.Tests
             var actual = Assert.Throws<InvalidOperationException>(() => _hashTable.Add(Key, Value));
 
             // assert
-            actual.Message.ShouldBeEqualTo("Key [key] already exists in a table.");
+            actual.Message.ShouldBeEqualTo("Duplicated key: [key].");
+        }
+
+        #endregion
+
+        #region Setter
+
+        [Test]
+        public void Setter_ShouldRemoveElement_WhenSetNullValueForKey()
+        {
+            // arrange
+            _hashTable.Add(Key, Value);
+            _hashTable.Add("Key2", Value);
+
+            // act
+            _hashTable[Key] = null;
+
+            // assert
+            _hashTable.Contains(Key).ShouldBeFalse();
+            _hashTable.Contains("Key2").ShouldBeTrue();
+        }
+
+        [Test]
+        public void Setter_ShouldAddElement_WhenKeyNotExistsAndNonNullValueForKeyPassed()
+        {
+            // act
+            _hashTable[Key] = Value;
+
+            // assert
+            _hashTable.Contains(Key).ShouldBeTrue();
+        }
+
+        [Test]
+        public void Setter_ShouldModifyElement_WhenKeyExists()
+        {
+            // arrange
+            _hashTable.Add(Key, Value);
+
+            // act
+            _hashTable[Key] = "modified";
+
+            // assert
+            _hashTable[Key].ShouldBeEqualTo("modified");
+        }
+
+        #endregion
+
+        #region Getter
+
+        [Test]
+        public void Getter_ShouldReturnElement_WhenKeyExists()
+        {
+            // arrange
+            _hashTable.Add(Key, Value);
+
+            // act
+            var actual = _hashTable[Key];
+
+            // assert
+            actual.ShouldBeEqualTo(Value);
+        }
+
+        [Test]
+        public void Getter_ShouldThrow_WhenKeyDoesNotExist()
+        {
+            // arrange
+            _hashTable.Add(Key, Value);
+
+            // act
+            object value = null;
+            var actual = Assert.Throws<InvalidOperationException>(() => value = _hashTable["invalid key"]);
+
+            // assert
+            actual.Message.ShouldBeEqualTo("Key [invalid key] does not exist in a table.");
+        }
+
+        #endregion
+
+        #region TryGet
+
+        [Test]
+        public void TryGet_ShouldReturnFalse_WhenKeyWasNotFound()
+        {
+            // arrange
+            _hashTable.Add(Key, Value);
+
+            // act
+            var actual = _hashTable.TryGet("invalid key", out object value);
+
+            // assert
+            actual.ShouldBeFalse();
+        }
+
+        [Test]
+        public void TryGet_ShouldReturnTrueAndSetOutParameter_WhenKeyExists()
+        {
+            // arrange
+            _hashTable.Add(Key, Value);
+
+            // act
+            var actual = _hashTable.TryGet(Key, out object value);
+
+            // assert
+            actual.ShouldBeTrue();
+            value.ShouldBeEqualTo(Value);
         }
 
         #endregion
