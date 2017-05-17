@@ -26,6 +26,9 @@ namespace DataStructures.Tests
         [Test]
         public void Contains_ShouldReturnFalse_WhenElementIsNotInTable()
         {
+            // arrange
+            _hashTable.Add("Key2", "Value222");
+
             // act & assert
             _hashTable.Contains(Key).ShouldBeFalse();
         }
@@ -103,6 +106,7 @@ namespace DataStructures.Tests
         {
             // arrange
             _hashTable.Add(Key, Value);
+            _hashTable.Add("@Key", "Value@");
 
             // act
             _hashTable[Key] = "modified";
@@ -120,6 +124,7 @@ namespace DataStructures.Tests
         {
             // arrange
             _hashTable.Add(Key, Value);
+            _hashTable.Add("Key2", "2Value");
 
             // act
             var actual = _hashTable[Key];
@@ -133,10 +138,10 @@ namespace DataStructures.Tests
         {
             // arrange
             _hashTable.Add(Key, Value);
+            _hashTable.Add("Key2", "Value2");
 
             // act
-            object value = null;
-            var actual = Assert.Throws<InvalidOperationException>(() => value = _hashTable["invalid key"]);
+            var actual = Assert.Throws<InvalidOperationException>(() => { var value = _hashTable["invalid key"]; });
 
             // assert
             actual.Message.ShouldBeEqualTo("Key [invalid key] does not exist in a table.");
@@ -151,6 +156,7 @@ namespace DataStructures.Tests
         {
             // arrange
             _hashTable.Add(Key, Value);
+            _hashTable.Add("Key2", "Value2");
 
             // act
             var actual = _hashTable.TryGet("invalid key", out string value);
@@ -165,6 +171,7 @@ namespace DataStructures.Tests
         {
             // arrange
             _hashTable.Add(Key, Value);
+            _hashTable.Add("Key2", "Value2");
 
             // act
             var actual = _hashTable.TryGet(Key, out string value);
