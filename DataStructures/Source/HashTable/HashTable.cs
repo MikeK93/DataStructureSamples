@@ -9,11 +9,11 @@ namespace DataStructures.Source.HashTable
     public class HashTable<TKey, TValue> : IHashTable<TKey, TValue>
     {
         private const double LoadFactorThreshold = 0.9;
-        private ILinkedList<Entry<TKey, TValue>>[] _entries;
+        private ILinkedList<Entry<TKey, TValue>>[] _buckets;
 
         public HashTable()
         {
-            _entries = new LinkedList.LinkedList<Entry<TKey, TValue>>[15];
+            _buckets = new ILinkedList<Entry<TKey, TValue>>[15];
         }
 
         public int Count { get; private set; }
@@ -31,18 +31,40 @@ namespace DataStructures.Source.HashTable
             }
             set
             {
-                AddOrUpdate(key, value, true);
+                var bucket = GetBucket(key, _buckets);
+                var entry = bucket.FirstOrDefault(x => x.Key.Equals(key));
+                if (entry == null)
+                {
+                    AddEntry(key, value, bucket);
+                    return;
+                }
+
+                if (value == null)
+                {
+                    bucket.Remove(entry);
+                    Count--;
+                    return;
+                }
+
+                entry.Value = value;
             }
         }
 
         public void Add(TKey key, TValue value)
         {
-            AddOrUpdate(key, value, false);
+            var bucket = GetBucket(key, _buckets);
+            var entry = bucket.FirstOrDefault(x => x.Key.Equals(key));
+            if (entry != null)
+            {
+                throw new InvalidOperationException($"Duplicated key: [{key}].");
+            }
+
+            AddEntry(key, value, bucket);
         }
 
         public bool TryGet(TKey key, out TValue value)
         {
-            var entry = GetBucket(key, _entries).FirstOrDefault(x => x.Key.Equals(key));
+            var entry = GetBucket(key, _buckets).FirstOrDefault(x => x.Key.Equals(key));
             if (entry == null)
             {
                 value = default(TValue);
@@ -55,7 +77,7 @@ namespace DataStructures.Source.HashTable
 
         public bool Contains(TKey key)
         {
-            return GetBucket(key, _entries).Any(entry => entry.Key.Equals(key));
+            return GetBucket(key, _buckets).Any(entry => entry.Key.Equals(key));
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -70,73 +92,35 @@ namespace DataStructures.Source.HashTable
                 yield break;
             }
 
-            for (int i = 0; i < _entries.Length; i++)
+            foreach (var entry in _buckets.Where(bucket => bucket != null).SelectMany(bucket => bucket))
             {
-                var bucket = _entries[i];
-                if (bucket == null)
-                {
-                    continue;
-                }
-
-                foreach (var entry in bucket)
-                {
-                    yield return entry;
-                }
+                yield return entry;
             }
         }
 
-        private void AddOrUpdate(TKey key, TValue value, bool updatable)
+        private void AddEntry(TKey key, TValue value, ILinkedList<Entry<TKey, TValue>> bucket)
         {
-            var bucket = GetBucket(key, _entries);
-            var entry = bucket.FirstOrDefault(x => x.Key.Equals(key));
-            if (entry == null)
-            {
-                bucket.Add(new Entry<TKey, TValue>(key, value));
-                Count++;
-                TryResize();
-                return;
-            }
-
-            if (!updatable)
-            {
-                throw new InvalidOperationException($"Duplicated key: [{key}].");
-            }
-
-            if (value == null)
-            {
-                bucket.Remove(entry);
-                Count--;
-                return;
-            }
-
-            entry.Value = value;
+            bucket.Add(new Entry<TKey, TValue>(key, value));
+            Count++;
+            TryResize();
         }
 
         private void TryResize()
         {
-            if ((double)Count / _entries.Length < LoadFactorThreshold)
+            if ((double)Count / _buckets.Length < LoadFactorThreshold)
             {
                 return;
             }
+            
+            var resizedEntries = new ILinkedList<Entry<TKey, TValue>>[_buckets.Length * 2];
 
-            var resizedEntries = new LinkedList.LinkedList<Entry<TKey, TValue>>[_entries.Length * 2];
-
-            for (var i = 0; i < _entries.Length; i++)
+            foreach (var entry in _buckets.Where(bucket => bucket != null).SelectMany(entry => entry))
             {
-                var list = _entries[i];
-                if (list == null)
-                {
-                    continue;
-                }
-
-                foreach (var entry in list)
-                {
-                    var bucket = GetBucket(entry.Key, resizedEntries);
-                    bucket.Add(entry);
-                }
+                var bucket = GetBucket(entry.Key, resizedEntries);
+                bucket.Add(entry);
             }
 
-            _entries = resizedEntries;
+            _buckets = resizedEntries;
         }
 
         private static ILinkedList<Entry<TKey, TValue>> GetBucket(TKey key, ILinkedList<Entry<TKey, TValue>>[] buckets)

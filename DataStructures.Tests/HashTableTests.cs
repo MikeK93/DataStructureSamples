@@ -3,7 +3,7 @@ using DataStructures.Contracts;
 using DataStructures.Source.HashTable;
 using FluentAssert;
 using NUnit.Framework;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace DataStructures.Tests
 {
@@ -157,8 +157,9 @@ namespace DataStructures.Tests
 
             // assert
             actual.ShouldBeFalse();
+            value.ShouldNotBeEqualTo(Value);
         }
-        
+
         [Test]
         public void TryGet_ShouldReturnTrueAndSetOutParameter_WhenKeyExists()
         {
@@ -179,29 +180,20 @@ namespace DataStructures.Tests
         public void IEnumerableImplementation_ShouldBeAbleToIterateOverTable()
         {
             // arrange
-            var items = new Entry<string, string>[]
+            _hashTable = new HashTable<string, string>
             {
-                new Entry<string, string>("key1", "value1"),
-                new Entry<string, string>("key2", "value2"),
-                new Entry<string, string>("key3", "value3"),
-                new Entry<string, string>("key4", "value4")
+                { "key1", "value1" },
+                { "key2", "value2" },
+                { "key3", "value3" },
+                { "key4", "value4" }
             };
 
-            foreach (var item in items)
-            {
-                _hashTable.Add(item.Key, item.Value);
-            }
-
             // act
-            var actual = new List<Entry<string, string>>();
-            foreach (var item in _hashTable)
-            {
-                actual.Add(item);
-            }
+            var actual = _hashTable.ToList();
 
             // assert
             actual.Count.ShouldBeEqualTo(4);
-            actual.TrueForAll(entry => _hashTable.Contains(entry.Key)).ShouldBeTrue();
+            CollectionAssert.AreEqual(_hashTable, actual);
         }
     }
 }
