@@ -2,7 +2,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DataStructures.LinkedList
 {
@@ -129,22 +128,17 @@ namespace DataStructures.LinkedList
 
         private Node<T> ElementAt(int index, Node<T> node)
         {
-            var result = node;
-
-            while (index <= 0 && result != null)
+            if (index < 0 || (index != 0 && node.Next == null))
             {
-                result = result.Next;
-                index--;
+                return null;
             }
 
-            return result;
-            
-            //if (index < 0 || index == 0 || node == null)
-            //{
-            //    return node;
-            //}
-            
-            //return ElementAt(index - 1, node.Next);
+            if (index == 0)
+            {
+                return node;
+            }
+
+            return ElementAt(index - 1, node.Next);
         }
 
         private void ValidateIndex(int index, int maxIndex)
