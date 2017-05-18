@@ -28,8 +28,18 @@ namespace DataStructures.Tests
             var actual = _stack.Pop();
 
             // assert
-            _stack.Count.ShouldBeEqualTo(0);
             actual.ShouldBeEqualTo(expected);
+        }
+
+        [Test]
+        public void Count_ShouldReturnCorrectCount()
+        {
+            // act
+            _stack.Push("Element #1");
+            _stack.Push("Element #2");
+
+            // assert
+            _stack.Count.ShouldBeEqualTo(2);
         }
 
         #region Pop

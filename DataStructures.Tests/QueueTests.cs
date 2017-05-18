@@ -63,16 +63,15 @@ namespace DataStructures.Tests
         public void IEnumerableImplementation_ShouldBeAbleToIterateOverQueue()
         {
             // arrange
+            var expeced = new[] { "A", "B", "C" };
+
+            // act
             _queue.Enqueue("A");
             _queue.Enqueue("B");
             _queue.Enqueue("C");
-
-            // act
-            var actual = _queue.Aggregate(String.Empty, String.Concat);
-
+            
             // assert
-            actual.ShouldBeEqualTo("ABC");
-            _queue.Count.ShouldBeEqualTo(3);
+            _queue.AsEnumerable().ShouldBeEqualTo(expeced);
         }
     }
 }
