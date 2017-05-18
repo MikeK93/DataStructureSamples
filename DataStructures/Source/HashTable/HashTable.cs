@@ -87,15 +87,7 @@ namespace DataStructures.Source.HashTable
 
         public IEnumerator<Entry<TKey, TValue>> GetEnumerator()
         {
-            if (Count == 0)
-            {
-                yield break;
-            }
-
-            foreach (var entry in _buckets.Where(bucket => bucket != null).SelectMany(bucket => bucket))
-            {
-                yield return entry;
-            }
+            return _buckets.Where(bucket => bucket != null).SelectMany(bucket => bucket).GetEnumerator();
         }
 
         private void AddEntry(TKey key, TValue value, ILinkedList<Entry<TKey, TValue>> bucket)
