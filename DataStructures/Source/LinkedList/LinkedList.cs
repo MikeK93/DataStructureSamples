@@ -72,7 +72,9 @@ namespace DataStructures.LinkedList
         {
             ValidateIndex(index, Length - 1);
 
-            RemoveNode(index);
+            var previous = ElementAt(index - 1, _head);
+
+            RemoveNode(index, previous);
         }
 
         public T ElementAt(int index)
@@ -102,25 +104,20 @@ namespace DataStructures.LinkedList
             }
         }
 
-        private void RemoveNode(int index, Node<T> previous = null)
+        private void RemoveNode(int index, Node<T> previous)
         {
             if (index == 0)
             {
                 _head = _head.Next;
             }
+            else if (index == Length - 1)
+            {
+                _tale = previous;
+                _tale.Next = null;
+            }
             else
             {
-                previous = previous ?? ElementAt(index - 1, _head);
-
-                if (index == Length - 1)
-                {
-                    _tale = previous;
-                    _tale.Next = null;
-                }
-                else
-                {
-                    previous.Next = previous.Next.Next;
-                }
+                previous.Next = previous.Next.Next;
             }
 
             Length--;
@@ -128,17 +125,14 @@ namespace DataStructures.LinkedList
 
         private static Node<T> ElementAt(int index, Node<T> node)
         {
-            if (index < 0 || (index != 0 && node.Next == null))
+            var result = node;
+
+            for (int i = 0; i < index; i++)
             {
-                return null;
+                result = result.Next;
             }
 
-            if (index == 0)
-            {
-                return node;
-            }
-
-            return ElementAt(index - 1, node.Next);
+            return result;
         }
 
         private void ValidateIndex(int index, int maxIndex)
