@@ -47,7 +47,7 @@ namespace DataStructures.LinkedList
                 return;
             }
 
-            var previous = ElementAt(index - 1, _head);
+            var previous = FindNodeAt(index - 1);
             previous.Next = new Node<T>(item, previous.Next);
             Length++;
         }
@@ -55,9 +55,9 @@ namespace DataStructures.LinkedList
         public void Remove(T item)
         {
             var previous = _head;
+            var node = _head;
             for (int i = 0; i < Length; i++)
             {
-                var node = ElementAt(i, _head);
                 if (node.Item.Equals(item))
                 {
                     RemoveNode(i, previous);
@@ -65,6 +65,7 @@ namespace DataStructures.LinkedList
                 }
 
                 previous = node;
+                node = node.Next;
             }
         }
 
@@ -72,7 +73,7 @@ namespace DataStructures.LinkedList
         {
             ValidateIndex(index, Length - 1);
 
-            var previous = ElementAt(index - 1, _head);
+            var previous = FindNodeAt(index - 1);
 
             RemoveNode(index, previous);
         }
@@ -81,7 +82,7 @@ namespace DataStructures.LinkedList
         {
             ValidateIndex(index, Length);
 
-            return ElementAt(index, _head).Item;
+            return FindNodeAt(index).Item;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -123,15 +124,13 @@ namespace DataStructures.LinkedList
             Length--;
         }
 
-        private static Node<T> ElementAt(int index, Node<T> node)
+        private Node<T> FindNodeAt(int index)
         {
-            var result = node;
-
-            for (int i = 0; i < index; i++)
+            var result = _head;
+            for (var i = 0; i < index; i++)
             {
                 result = result.Next;
             }
-
             return result;
         }
 
