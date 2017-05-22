@@ -54,13 +54,13 @@ namespace DataStructures.LinkedList
 
         public void Remove(T item)
         {
-            var previous = _head;
+            Node<T> previous = null;
             var node = _head;
             for (int i = 0; i < Length; i++)
             {
                 if (node.Item.Equals(item))
                 {
-                    RemoveNode(i, previous);
+                    RemoveNode(previous);
                     return;
                 }
 
@@ -75,7 +75,7 @@ namespace DataStructures.LinkedList
 
             var previous = FindNodeAt(index - 1);
 
-            RemoveNode(index, previous);
+            RemoveNode(previous);
         }
 
         public T ElementAt(int index)
@@ -105,13 +105,13 @@ namespace DataStructures.LinkedList
             }
         }
 
-        private void RemoveNode(int index, Node<T> previous)
+        private void RemoveNode(Node<T> previous)
         {
-            if (index == 0)
+            if (previous == null)
             {
                 _head = _head.Next;
             }
-            else if (index == Length - 1)
+            else if (previous.Next.Equals(_tale))
             {
                 _tale = previous;
                 _tale.Next = null;
@@ -126,10 +126,17 @@ namespace DataStructures.LinkedList
 
         private Node<T> FindNodeAt(int index)
         {
-            var result = _head;
-            for (var i = 0; i < index; i++)
+            Node<T> result = null;
+            for (var i = 0; i <= index; i++)
             {
-                result = result.Next;
+                if (result == null)
+                {
+                    result = _head;
+                }
+                else
+                {
+                    result = result.Next;
+                }
             }
             return result;
         }
