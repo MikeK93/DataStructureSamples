@@ -1,5 +1,4 @@
-﻿using DataStructures;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using FluentAssert;
 using DataStructures.Contracts;
 using System;

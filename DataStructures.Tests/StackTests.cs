@@ -75,7 +75,7 @@ namespace DataStructures.Tests
         #region Peek
 
         [Test]
-        public void Peek_ShouldShowNextElementWithoutPopping()
+        public void Peek_ShouldShowNextElement()
         {
             // arrange
             _stack.Push("a");
@@ -84,8 +84,20 @@ namespace DataStructures.Tests
             var actual = _stack.Peek();
 
             // assert
-            _stack.Count.ShouldBeEqualTo(1);
             actual.ShouldBeEqualTo("a");
+        }
+
+        [Test]
+        public void Peek_ShouldNotChangeCount()
+        {
+            // arrange
+            _stack.Push("a");
+
+            // act
+            _stack.Peek();
+
+            // assert
+            _stack.Count.ShouldBeEqualTo(1);
         }
 
         [Test]
