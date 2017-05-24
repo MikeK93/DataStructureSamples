@@ -189,6 +189,15 @@ namespace DataStructures.Tests
         public void IEnumerableImplementation_ShouldBeAbleToIterateOverTable()
         {
             // arrange
+            var expected = new[]
+            {
+                new Entry<string, string>("key1", "value1"),
+                new Entry<string, string>("key2", "value2"),
+                new Entry<string, string>("key3", "value3"),
+                new Entry<string, string>("key4", "value4")
+            };
+
+            // act
             _hashTable = new HashTable<string, string>
             {
                 { "key1", "value1" },
@@ -197,12 +206,8 @@ namespace DataStructures.Tests
                 { "key4", "value4" }
             };
 
-            // act
-            var actual = _hashTable.ToList();
-
             // assert
-            actual.Count.ShouldBeEqualTo(4);
-            CollectionAssert.AreEqual(_hashTable, actual);
+            _hashTable.AsEnumerable().ShouldBeEqualTo(expected);
         }
     }
 }
