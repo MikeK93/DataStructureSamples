@@ -42,9 +42,22 @@ namespace DataStructures.Tests
             var last = _queue.Dequeue();
 
             // assert
-            _queue.Count.ShouldBeEqualTo(0);
             first.ShouldBeEqualTo("e");
             last.ShouldBeEqualTo("p");
+        }
+
+        [Test]
+        public void Dequeue_ShouldUpdateCount()
+        {
+            // arrange
+            _queue.Enqueue("a");
+            _queue.Enqueue("a");
+
+            // act
+            _queue.Dequeue();
+
+            // assert
+            _queue.Count.ShouldBeEqualTo(1);
         }
 
         [Test]
