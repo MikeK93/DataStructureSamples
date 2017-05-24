@@ -62,6 +62,17 @@ namespace DataStructures.Tests
         }
 
         [Test]
+        public void Add_ShouldUpdateCount()
+        {
+            // act
+            _hashTable.Add(Key, Value);
+            _hashTable.Add(Key2, Value);
+
+            // assert
+            _hashTable.Count.ShouldBeEqualTo(2);
+        }
+
+        [Test]
         public void Add_ShouldThrow_WhenElementWithSameKeyAddedTwice()
         {
             // arrange
@@ -79,7 +90,7 @@ namespace DataStructures.Tests
         #region Setter
 
         [Test]
-        public void Setter_ShouldRemoveElement_WhenSetNullValueForKey()
+        public void Setter_ShouldRemoveElement_WhenSetNullValueForExistingKey()
         {
             // arrange
             _hashTable.Add(Key, Value);
@@ -90,6 +101,33 @@ namespace DataStructures.Tests
 
             // assert
             _hashTable.Contains(Key).ShouldBeFalse();
+        }
+
+        [Test]
+        public void Setter_ShouldRemoveElementAndUpdateCount_WhenSetNullValueForExistingKey()
+        {
+            // arrange
+            _hashTable.Add(Key, Value);
+            _hashTable.Add(Key2, Value);
+
+            // act
+            _hashTable[Key] = null;
+
+            // assert
+            _hashTable.Count.ShouldBeEqualTo(1);
+        }
+
+        [Test]
+        public void Setter_ShouldRemoveElementAndDontRemoveAnotherKey_WhenSetNullValueForExistingKey()
+        {
+            // arrange
+            _hashTable.Add(Key, Value);
+            _hashTable.Add(Key2, Value);
+
+            // act
+            _hashTable[Key] = null;
+
+            // assert
             _hashTable.Contains(Key2).ShouldBeTrue();
         }
 
@@ -165,11 +203,25 @@ namespace DataStructures.Tests
 
             // assert
             actual.ShouldBeFalse();
-            value.ShouldNotBeEqualTo(Value);
+            //value.ShouldNotBeEqualTo(Value);
         }
 
         [Test]
-        public void TryGet_ShouldReturnTrueAndSetOutParameter_WhenKeyExists()
+        public void TryGet_ShouldSetValueToNull_WhenKeyWasNotFound()
+        {
+            // arrange
+            _hashTable.Add(Key, Value);
+            _hashTable.Add(Key2, Value2);
+
+            // act
+            _hashTable.TryGet("invalid key", out string value);
+
+            // assert
+            value.ShouldBeNull();
+        }
+
+        [Test]
+        public void TryGet_ShouldReturnTrue_WhenKeyExists()
         {
             // arrange
             _hashTable.Add(Key, Value);
@@ -180,6 +232,19 @@ namespace DataStructures.Tests
 
             // assert
             actual.ShouldBeTrue();
+        }
+
+        [Test]
+        public void TryGet_ShoudSetOutParameterWithCorrectValue_WhenKeyExists()
+        {
+            // arrange
+            _hashTable.Add(Key, Value);
+            _hashTable.Add(Key2, Value2);
+
+            // act
+            _hashTable.TryGet(Key, out string value);
+
+            // assert
             value.ShouldBeEqualTo(Value);
         }
 
@@ -207,7 +272,7 @@ namespace DataStructures.Tests
             };
 
             // assert
-            _hashTable.AsEnumerable().ShouldBeEqualTo(expected);
+            CollectionAssert.AreEqual(_hashTable.OrderBy(entry => entry.Key), expected);
         }
     }
 }
