@@ -104,16 +104,15 @@ namespace DataStructures.Tests
         public void IEnumerableImplementation_CanIterateOverStack()
         {
             // arrange 
+            var expected = new[] { "C", "B", "A" };
+
+            // act
             _stack.Push("A");
             _stack.Push("B");
             _stack.Push("C");
 
-            // act
-            var actual = _stack.Aggregate(String.Empty, String.Concat);
-
             // arrange
-            actual.ShouldBeEqualTo("CBA");
-            _stack.Count.ShouldBeEqualTo(3);
+            _stack.AsEnumerable().ShouldBeEqualTo(expected);
         }
     }
 }
