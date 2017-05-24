@@ -56,7 +56,6 @@ namespace DataStructures.Tests
             var last = _stack.Pop();
 
             // assert
-            _stack.Count.ShouldBeEqualTo(0);
             first.ShouldBeEqualTo("last");
             last.ShouldBeEqualTo("first");
         }

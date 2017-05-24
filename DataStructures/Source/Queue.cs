@@ -41,12 +41,14 @@ namespace DataStructures
 
         public IEnumerator<T> GetEnumerator()
         {
-            var enumerable = _list.First;
-            while (enumerable != null)
-            {
-                yield return enumerable.Value;
-                enumerable = enumerable.Next;
-            }
+            return _list.GetEnumerator();
+
+            //var enumerable = _list.First;
+            //while (enumerable != null)
+            //{
+            //    yield return enumerable.Value;
+            //    enumerable = enumerable.Next;
+            //}
         }
     }
 }

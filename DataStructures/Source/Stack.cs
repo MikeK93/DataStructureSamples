@@ -52,12 +52,7 @@ namespace DataStructures
 
         public IEnumerator<T> GetEnumerator()
         {
-            var enumerable = _nodes.First;
-            while (enumerable != null)
-            {
-                yield return enumerable.Value;
-                enumerable = enumerable.Next;
-            }
+            return _nodes.GetEnumerator();
         }
     }
 }
