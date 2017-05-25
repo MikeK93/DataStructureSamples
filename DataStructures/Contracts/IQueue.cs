@@ -5,7 +5,7 @@ namespace DataStructures.Contracts
     public interface IQueue<T> : IEnumerable<T>
     {
         /// <summary>
-        /// Adds item to a queue.
+        /// Adds item to the front of a queue.
         /// </summary>
         /// <param name="item">Item to add to a queue</param>
         void Enqueue(T item);

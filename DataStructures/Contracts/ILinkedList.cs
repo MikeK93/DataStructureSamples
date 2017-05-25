@@ -24,7 +24,7 @@ namespace DataStructures.Contracts
         void AddAt(int index, T item);
         
         /// <summary>
-        /// Removes item from a list.
+        /// Removes first occurence from a list.
         /// </summary>
         /// <param name="item">Item to be removed.</param>
         void Remove(T item);
