@@ -203,7 +203,6 @@ namespace DataStructures.Tests
 
             // assert
             actual.ShouldBeFalse();
-            //value.ShouldNotBeEqualTo(Value);
         }
 
         [Test]
@@ -272,7 +271,7 @@ namespace DataStructures.Tests
             };
 
             // assert
-            CollectionAssert.AreEqual(_hashTable.OrderBy(entry => entry.Key), expected);
+            _hashTable.AsEnumerable().ShouldBeEqualTo(expected);
         }
     }
 }

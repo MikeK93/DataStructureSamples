@@ -9,30 +9,30 @@ namespace DataStructures.Contracts
         /// Checks if key exists in a table.
         /// </summary>
         /// <param name="key">Key to look up.</param>
-        /// <returns>Exists or no.</returns>
+        /// <returns>Status if <param name="key"/> was not found.</returns>
         bool Contains(TKey key);
 
         /// <summary>
         /// Adds new entry to a table.
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
+        /// <param name="key">Key of entry.</param>
+        /// <param name="value">Value of entry.</param>
         /// <exception cref="System.InvalidOperationException">Throws when key already exists.</exception>
         void Add(TKey key, TValue value);
 
         /// <summary>
         /// Gets existing value by a key. Sets new entiry.if not key not found and update if found.
         /// </summary>
-        /// <param name="key"></param>
-        /// <returns>Value by a key.</returns>
+        /// <param name="key">Key of entry.</param>
+        /// <returns>Value associated with a <param name="key"/>.</returns>
         /// <exception cref="System.InvalidOperationException">Throws when key was not found.</exception>
         TValue this[TKey key] { get; set; }
 
         /// <summary>
         /// Returns false if key was not found and true if found.
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
+        /// <param name="key">Key of entry.</param>
+        /// <param name="value">Value of entry.</param>
         /// <returns></returns>
         bool TryGet(TKey key, out TValue value);
 
