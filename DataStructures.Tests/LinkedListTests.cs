@@ -134,7 +134,7 @@ namespace DataStructures.Tests
             // act & assert
             list.Length.ShouldBeEqualTo(2);
         }
-
+        
         [TestCase("e", new[] { "p", "a", "m" }, TestName = "WhenElementAtBeginningOfList")]
         [TestCase("a", new[] { "e", "p", "m" }, TestName = "WhenElementInMiddleOfList")]
         [TestCase("m", new[] { "e", "p", "a" }, TestName = "WhenElementAtEndOfList")]

@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DataStructures.LinkedList
 {
@@ -54,18 +55,13 @@ namespace DataStructures.LinkedList
 
         public void Remove(T item)
         {
-            Node<T> previous = null;
-            var node = _head;
-            for (int i = 0; i < Length; i++)
+            for (Node<T> previous = null, current = _head; current != null; previous = current, current = current.Next)
             {
-                if (node.Item.Equals(item))
+                if (current.Item.Equals(item))
                 {
                     RemoveNode(previous);
                     return;
                 }
-
-                previous = node;
-                node = node.Next;
             }
         }
 
@@ -92,17 +88,7 @@ namespace DataStructures.LinkedList
 
         public IEnumerator<T> GetEnumerator()
         {
-            if (_head == null)
-            {
-                yield break;
-            }
-
-            var enumerator = _head;
-            while (enumerator != null)
-            {
-                yield return enumerator.Item;
-                enumerator = enumerator.Next;
-            }
+            return GetSequence().Select(node => node.Item).GetEnumerator();
         }
 
         private void RemoveNode(Node<T> previous)
@@ -126,19 +112,22 @@ namespace DataStructures.LinkedList
 
         private Node<T> FindNodeAt(int index)
         {
-            Node<T> result = null;
-            for (var i = 0; i <= index; i++)
+            return GetSequence().Where((node, i) => i == index).FirstOrDefault();
+        }
+
+        private IEnumerable<Node<T>> GetSequence()
+        {
+            if (_head == null)
             {
-                if (result == null)
-                {
-                    result = _head;
-                }
-                else
-                {
-                    result = result.Next;
-                }
+                yield break;
             }
-            return result;
+
+            var enumerator = _head;
+            while (enumerator != null)
+            {
+                yield return enumerator;
+                enumerator = enumerator.Next;
+            }
         }
 
         private void ValidateIndex(int index, int maxIndex)
