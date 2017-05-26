@@ -20,12 +20,12 @@ namespace DataStructures.Source.HashTable
 
         public override bool Equals(object obj)
         {
-            return AreEqual(this, obj as Entry<TKey, TValue>);
+            return Equals(obj as Entry<TKey, TValue>);
         }
 
         public bool Equals(Entry<TKey, TValue> obj)
         {
-            return AreEqual(this, obj);
+            return obj != null && Key.Equals(obj.Key) && Value.Equals(obj.Value);
         }
 
         public override int GetHashCode()
@@ -34,11 +34,6 @@ namespace DataStructures.Source.HashTable
             {
                 return (EqualityComparer<TKey>.Default.GetHashCode(Key) * 397) ^ EqualityComparer<TValue>.Default.GetHashCode(Value);
             }
-        }
-
-        public bool AreEqual(Entry<TKey, TValue> obj1, Entry<TKey, TValue> obj2)
-        {
-            return obj1 != null && obj1.Key.Equals(obj2.Key) && obj1.Value.Equals(obj2.Value);
         }
     }
 }
