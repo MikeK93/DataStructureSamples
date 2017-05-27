@@ -15,7 +15,7 @@ namespace DataStructures.LinkedList
 
         public void Add(T item)
         {
-            var node = new Node<T>(item);
+            var node = new Node<T>(item, _head);
 
             if (_head == null)
             {
@@ -38,6 +38,7 @@ namespace DataStructures.LinkedList
             if (index == 0)
             {
                 _head = new Node<T>(item, _head);
+                _tale.Next = _head;
                 Length++;
                 return;
             }
@@ -55,23 +56,14 @@ namespace DataStructures.LinkedList
 
         public void Remove(T item)
         {
-            for (Node<T> previous = null, current = _head; current != null; previous = current, current = current.Next)
-            {
-                if (current.Item.Equals(item))
-                {
-                    RemoveNode(previous);
-                    return;
-                }
-            }
+            RemoveNode(GetSequence().FirstOrDefault(node => node.Next.Item.Equals(item)));
         }
 
         public void RemoveAt(int index)
         {
             ValidateIndex(index, Length - 1);
 
-            var previous = FindNodeAt(index - 1);
-
-            RemoveNode(previous);
+            RemoveNode(FindNodeAt(index - 1));
         }
 
         public T ElementAt(int index)
@@ -95,12 +87,18 @@ namespace DataStructures.LinkedList
         {
             if (previous == null)
             {
+                return;
+            }
+
+            if (previous == _tale)
+            {
                 _head = _head.Next;
+                _tale.Next = _head;
             }
             else if (previous.Next.Equals(_tale))
             {
                 _tale = previous;
-                _tale.Next = null;
+                _tale.Next = _head;
             }
             else
             {
@@ -112,7 +110,8 @@ namespace DataStructures.LinkedList
 
         private Node<T> FindNodeAt(int index)
         {
-            return GetSequence().Where((node, i) => i == index).FirstOrDefault();
+            var nodeIndex = index >= 0 ? index : Length - Math.Abs(index);
+            return GetSequence().Where((node, i) => i == nodeIndex).FirstOrDefault();
         }
 
         private IEnumerable<Node<T>> GetSequence()
@@ -123,11 +122,11 @@ namespace DataStructures.LinkedList
             }
 
             var enumerator = _head;
-            while (enumerator != null)
+            do
             {
                 yield return enumerator;
                 enumerator = enumerator.Next;
-            }
+            } while (enumerator != _head);
         }
 
         private void ValidateIndex(int index, int maxIndex)
