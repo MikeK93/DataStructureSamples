@@ -25,7 +25,10 @@ namespace DataStructures.Source.HashTable
 
         public bool Equals(Entry<TKey, TValue> obj)
         {
-            return obj != null && Key.Equals(obj.Key) && Value.Equals(obj.Value);
+            return obj != null && 
+                ReferenceEquals(this, obj) && 
+                (!EqualityComparer<TKey>.Default.Equals(Key, default(TKey)) && Key.Equals(obj.Key)) &&
+                (!EqualityComparer<TValue>.Default.Equals(Value, default(TValue)) && Value.Equals(obj.Value));
         }
 
         public override int GetHashCode()
