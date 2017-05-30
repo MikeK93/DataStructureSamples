@@ -111,7 +111,7 @@ namespace DataStructures.LinkedList
         private Node<T> FindNodeAt(int index)
         {
             var nodeIndex = index >= 0 ? index : Length - Math.Abs(index);
-            return GetSequence().Where((node, i) => i == nodeIndex).FirstOrDefault();
+            return GetSequence().ToList()[nodeIndex];
         }
 
         private IEnumerable<Node<T>> GetSequence()
