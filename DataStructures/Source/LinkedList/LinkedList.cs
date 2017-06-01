@@ -110,8 +110,8 @@ namespace DataStructures.LinkedList
 
         private Node<T> FindNodeAt(int index)
         {
-            var nodeIndex = index >= 0 ? index : Length - Math.Abs(index);
-            return GetSequence().ToList()[nodeIndex];
+            var nodeIndex = index >= 0 ? index : Length + index;
+            return GetSequence().Skip(nodeIndex).FirstOrDefault();
         }
 
         private IEnumerable<Node<T>> GetSequence()
