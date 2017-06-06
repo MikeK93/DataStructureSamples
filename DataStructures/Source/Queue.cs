@@ -9,14 +9,15 @@ namespace DataStructures
     {
         private readonly LinkedList<T> _list = new LinkedList<T>();
 
-        public T Enqueue(T item)
+        public void Enqueue(T item)
         {
             if (_list.Count == 0)
             {
-                return _list.AddFirst(item).Value;
+                _list.AddFirst(item);
+                return;
             }
 
-            return _list.AddAfter(_list.Last, item).Value;
+            _list.AddAfter(_list.Last, item);
         }
 
         public T Dequeue()
@@ -40,10 +41,7 @@ namespace DataStructures
 
         public IEnumerator<T> GetEnumerator()
         {
-            while (_list.Count != 0)
-            {
-                yield return Dequeue();
-            }
+            return _list.GetEnumerator();
         }
     }
 }

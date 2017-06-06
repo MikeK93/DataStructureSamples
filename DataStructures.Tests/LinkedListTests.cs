@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Linq;
 using DataStructures.LinkedList;
 using FluentAssert;
@@ -36,7 +35,7 @@ namespace DataStructures.Tests
             var actual = list.ElementAt(1);
 
             // assert
-            actual.Item.ShouldBeEqualTo(200);
+            actual.ShouldBeEqualTo(200);
         }
 
         #endregion
@@ -68,7 +67,7 @@ namespace DataStructures.Tests
         #region Add
 
         [Test]
-        public void Add_ShouldAddElementAndReturn()
+        public void Add_ShouldAddElementToList()
         {
             // arrange
             ILinkedList<string> list = new LinkedList<string>();
@@ -97,8 +96,10 @@ namespace DataStructures.Tests
             actual.Message.ShouldBeEqualTo("Index [100] must be between [0] and [3].\r\nParameter name: index\r\nActual value was 100.");
         }
 
-        [TestCaseSource(nameof(AddAtTestCaseSource))]
-        public void AddAt_ShouldAddElementAtPosition(int position, string expected)
+        [TestCase(0, new[] { "a", "e", "p", "m" }, TestName = "WhenElementAtBegginingOfList")]
+        [TestCase(2, new[] { "e", "p", "a", "m" }, TestName = "WhenElementInMiddleOfList")]
+        [TestCase(3, new[]{ "e", "p", "m", "a" }, TestName = "WhenElementAtEndOfList")]
+        public void AddAt_ShouldAddElementAtPosition(int position, string[] expected)
         {
             // arrange
             ILinkedList<string> list = new LinkedList<string> { "e", "p", "m" };
@@ -106,24 +107,16 @@ namespace DataStructures.Tests
             // act
             list.AddAt(position, "a");
 
-            var actual = list.Aggregate(string.Empty, String.Concat);
-
             // assert
-            actual.ShouldBeEqualTo(expected);
+            list.AsEnumerable().ShouldBeEqualTo(expected);
         }
-        private static IEnumerable AddAtTestCaseSource()
-        {
-            yield return new TestCaseData(0, "aepm") { TestName = "WhenElementAtBegginingOfList" };
-            yield return new TestCaseData(2, "epam") { TestName = "WhenElementInMiddleOfList" };
-            yield return new TestCaseData(3, "epma") { TestName = "WhenElementAtEndOfList" };
-        }
-
+        
         #endregion
 
         #region Remove
 
         [Test]
-        public void Remove_ShouldDoNothing_WhenElementWasNotFound()
+        public void Remove_ShouldNotThrow_WhenElementWasNotFound()
         {
             // arrange
             ILinkedList<int> list = new LinkedList<int> { 1, 2 };
@@ -132,27 +125,31 @@ namespace DataStructures.Tests
             Assert.DoesNotThrow(() => list.Remove(10));
         }
 
-        [Test, TestCaseSource(nameof(RemoveTestCaseSource))]
-        public void Remove_ShouldRemoveElement(string toRemove, string expected)
+        [Test]
+        public void Remove_ShouldNotChangeList_WhenElementWasNotFound()
+        {
+            // arrange
+            ILinkedList<int> list = new LinkedList<int> { 1, 2 };
+
+            // act & assert
+            list.Length.ShouldBeEqualTo(2);
+        }
+        
+        [TestCase("e", new[] { "p", "a", "m" }, TestName = "WhenElementAtBeginningOfList")]
+        [TestCase("a", new[] { "e", "p", "m" }, TestName = "WhenElementInMiddleOfList")]
+        [TestCase("m", new[] { "e", "p", "a" }, TestName = "WhenElementAtEndOfList")]
+        public void Remove_ShouldRemoveElement(string toRemove, string[] expected)
         {
             // arrange
             ILinkedList<string> list = new LinkedList<string> { "e", "p", "a", "m" };
 
             // act
             list.Remove(toRemove);
-            var actual = list.Aggregate(string.Empty, String.Concat);
 
             // assert
-            actual.ShouldBeEqualTo(expected);
+            list.AsEnumerable().ShouldBeEqualTo(expected);
         }
-
-        private static IEnumerable RemoveTestCaseSource()
-        {
-            yield return new TestCaseData("e", "pam") { TestName = "WhenElementAtBeginningOfList" };
-            yield return new TestCaseData("a", "epm") { TestName = "WhenElementInMiddleOfList" };
-            yield return new TestCaseData("m", "epa") { TestName = "WhenElementAtEndOfList" };
-        }
-
+        
         #endregion
 
         #region RemoveAt
@@ -169,29 +166,22 @@ namespace DataStructures.Tests
             // assert
             actual.Message.ShouldBeEqualTo("Index [100] must be between [0] and [1].\r\nParameter name: index\r\nActual value was 100.");
         }
-
-        [Test, TestCaseSource(nameof(RemoveAtTestCaseSource))]
-        public void RemoveAt_ShouldRemoveElementAtPosition(int index, string expected)
+        
+        [TestCase(0, new[] { "B", "C", "D" }, TestName = "WhenElementAtBeginningOfList")]
+        [TestCase(3, new[] { "A", "B", "C" }, TestName = "WhenElementAtEndOfList")]
+        [TestCase(1, new[] { "A", "C", "D" }, TestName = "WhenElementInMiddleOfList")]
+        public void RemoveAt_ShouldRemoveElementAtPosition(int index, string[] expected)
         {
             // arrange
             ILinkedList<string> list = new LinkedList<string> { "A", "B", "C", "D" };
 
             // act
             list.RemoveAt(index);
-            var actual = list.Aggregate(string.Empty, String.Concat);
-            
+
             // assert
-            list.Length.ShouldBeEqualTo(3);
-            actual.ShouldBeEqualTo(expected);
+            list.AsEnumerable().ShouldBeEqualTo(expected);
         }
-
-        public static IEnumerable RemoveAtTestCaseSource()
-        {
-            yield return new TestCaseData(0, "BCD") { TestName = "WhenElementAtBeginningOfList" };
-            yield return new TestCaseData(3, "ABC") { TestName = "WhenElementAtEndOfList" };
-            yield return new TestCaseData(1, "ACD") { TestName = "WhenElementInMiddleOfList" };
-        }
-
+        
         #endregion
     }
 }

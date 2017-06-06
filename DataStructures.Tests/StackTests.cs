@@ -2,6 +2,7 @@
 using FluentAssert;
 using NUnit.Framework;
 using System;
+using System.Linq;
 
 namespace DataStructures.Tests
 {
@@ -27,8 +28,18 @@ namespace DataStructures.Tests
             var actual = _stack.Pop();
 
             // assert
-            _stack.Count.ShouldBeEqualTo(1);
             actual.ShouldBeEqualTo(expected);
+        }
+
+        [Test]
+        public void Count_ShouldReturnCorrectCount()
+        {
+            // act
+            _stack.Push("Element #1");
+            _stack.Push("Element #2");
+
+            // assert
+            _stack.Count.ShouldBeEqualTo(2);
         }
 
         #region Pop
@@ -45,7 +56,6 @@ namespace DataStructures.Tests
             var last = _stack.Pop();
 
             // assert
-            _stack.Count.ShouldBeEqualTo(0);
             first.ShouldBeEqualTo("last");
             last.ShouldBeEqualTo("first");
         }
@@ -65,7 +75,7 @@ namespace DataStructures.Tests
         #region Peek
 
         [Test]
-        public void Peek_ShouldShowNextElementWithoutPopping()
+        public void Peek_ShouldShowNextElement()
         {
             // arrange
             _stack.Push("a");
@@ -74,8 +84,20 @@ namespace DataStructures.Tests
             var actual = _stack.Peek();
 
             // assert
-            _stack.Count.ShouldBeEqualTo(1);
             actual.ShouldBeEqualTo("a");
+        }
+
+        [Test]
+        public void Peek_ShouldNotChangeCount()
+        {
+            // arrange
+            _stack.Push("a");
+
+            // act
+            _stack.Peek();
+
+            // assert
+            _stack.Count.ShouldBeEqualTo(1);
         }
 
         [Test]
@@ -89,5 +111,20 @@ namespace DataStructures.Tests
         }
 
         #endregion
+
+        [Test]
+        public void IEnumerableImplementation_CanIterateOverStack()
+        {
+            // arrange 
+            var expected = new[] { "C", "B", "A" };
+
+            // act
+            _stack.Push("A");
+            _stack.Push("B");
+            _stack.Push("C");
+
+            // arrange
+            _stack.AsEnumerable().ShouldBeEqualTo(expected);
+        }
     }
 }

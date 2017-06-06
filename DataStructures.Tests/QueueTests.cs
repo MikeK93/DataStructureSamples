@@ -1,8 +1,8 @@
-﻿using DataStructures;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using FluentAssert;
 using DataStructures.Contracts;
 using System;
+using System.Linq;
 
 namespace DataStructures.Tests
 {
@@ -41,9 +41,22 @@ namespace DataStructures.Tests
             var last = _queue.Dequeue();
 
             // assert
-            _queue.Count.ShouldBeEqualTo(0);
             first.ShouldBeEqualTo("e");
             last.ShouldBeEqualTo("p");
+        }
+
+        [Test]
+        public void Dequeue_ShouldUpdateCount()
+        {
+            // arrange
+            _queue.Enqueue("a");
+            _queue.Enqueue("a");
+
+            // act
+            _queue.Dequeue();
+
+            // assert
+            _queue.Count.ShouldBeEqualTo(1);
         }
 
         [Test]
@@ -57,5 +70,20 @@ namespace DataStructures.Tests
         }
 
         #endregion
+
+        [Test]
+        public void IEnumerableImplementation_ShouldBeAbleToIterateOverQueue()
+        {
+            // arrange
+            var expeced = new[] { "A", "B", "C" };
+
+            // act
+            _queue.Enqueue("A");
+            _queue.Enqueue("B");
+            _queue.Enqueue("C");
+            
+            // assert
+            _queue.AsEnumerable().ShouldBeEqualTo(expeced);
+        }
     }
 }

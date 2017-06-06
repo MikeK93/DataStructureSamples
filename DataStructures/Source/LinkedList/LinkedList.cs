@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DataStructures.LinkedList
 {
@@ -14,7 +15,7 @@ namespace DataStructures.LinkedList
 
         public void Add(T item)
         {
-            var node = new Node<T>(item);
+            var node = new Node<T>(item, _head);
 
             if (_head == null)
             {
@@ -37,49 +38,39 @@ namespace DataStructures.LinkedList
             if (index == 0)
             {
                 _head = new Node<T>(item, _head);
+                _tale.Next = _head;
+                Length++;
+                return;
             }
-            else if (index == Length)
+
+            if (index == Length)
             {
                 Add(item);
                 return;
             }
-            else
-            {
-                var previous = ElementAt(index - 1, _head);
-                previous.Next = new Node<T>(item, previous.Next);
-            }
 
+            var previous = FindNodeAt(index - 1);
+            previous.Next = new Node<T>(item, previous.Next);
             Length++;
         }
 
         public void Remove(T item)
         {
-            var previous = _head;
-            for (int i = 0; i < Length; i++)
-            {
-                var node = ElementAt(i, _head);
-                if (node.Item.Equals(item))
-                {
-                    RemoveNode(i, previous);
-                    return;
-                }
-
-                previous = node;
-            }
+            RemoveNode(GetSequence().FirstOrDefault(node => node.Next.Item.Equals(item)));
         }
 
         public void RemoveAt(int index)
         {
             ValidateIndex(index, Length - 1);
 
-            RemoveNode(index);
+            RemoveNode(FindNodeAt(index - 1));
         }
 
-        public Node<T> ElementAt(int index)
+        public T ElementAt(int index)
         {
             ValidateIndex(index, Length);
 
-            return ElementAt(index, _head);
+            return FindNodeAt(index).Item;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -89,56 +80,53 @@ namespace DataStructures.LinkedList
 
         public IEnumerator<T> GetEnumerator()
         {
+            return GetSequence().Select(node => node.Item).GetEnumerator();
+        }
+
+        private void RemoveNode(Node<T> previous)
+        {
+            if (previous == null)
+            {
+                return;
+            }
+
+            if (previous == _tale)
+            {
+                _head = _head.Next;
+                _tale.Next = _head;
+            }
+            else if (previous.Next.Equals(_tale))
+            {
+                _tale = previous;
+                _tale.Next = _head;
+            }
+            else
+            {
+                previous.Next = previous.Next.Next;
+            }
+
+            Length--;
+        }
+
+        private Node<T> FindNodeAt(int index)
+        {
+            var nodeIndex = index >= 0 ? index : Length + index;
+            return GetSequence().Skip(nodeIndex).FirstOrDefault();
+        }
+
+        private IEnumerable<Node<T>> GetSequence()
+        {
             if (_head == null)
             {
                 yield break;
             }
 
             var enumerator = _head;
-            while (enumerator != null)
+            do
             {
-                yield return enumerator.Item;
+                yield return enumerator;
                 enumerator = enumerator.Next;
-            }
-        }
-
-        private void RemoveNode(int index, Node<T> previous = null)
-        {
-            if (index == 0)
-            {
-                _head = _head.Next;
-            }
-            else
-            {
-                previous = previous ?? ElementAt(index - 1, _head);
-
-                if (index == Length - 1)
-                {
-                    _tale = previous;
-                    _tale.Next = null;
-                }
-                else
-                {
-                    previous.Next = previous.Next.Next;
-                }
-            }
-
-            Length--;
-        }
-
-        private Node<T> ElementAt(int index, Node<T> node)
-        {
-            if (index < 0 || (index != 0 && node.Next == null))
-            {
-                return null;
-            }
-
-            if (index == 0)
-            {
-                return node;
-            }
-
-            return ElementAt(index - 1, node.Next);
+            } while (enumerator != _head);
         }
 
         private void ValidateIndex(int index, int maxIndex)
