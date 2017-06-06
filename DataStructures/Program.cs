@@ -33,8 +33,8 @@ namespace DataStructures
                 Console.WriteLine($"\t-{item};");
             }
 
-            Console.WriteLine($"\n{toDoList.ElementAt(0).Item} is done!");
-            Console.WriteLine($"{toDoList.ElementAt(2).Item} is done!");
+            Console.WriteLine($"\n{toDoList.ElementAt(0)} is done!");
+            Console.WriteLine($"{toDoList.ElementAt(2)} is done!");
             
             toDoList.Remove("Buy milk");
             toDoList.RemoveAt(1);
@@ -51,10 +51,11 @@ namespace DataStructures
             Console.WriteLine($"\n**** {nameof(QueueDemo)} ****\n");
 
             var groceryQueue = new Queue<string>();
-
-            Console.WriteLine($@"- {groceryQueue.Enqueue("Mike")} came at {DateTime.Now.ToLongTimeString()}.");
+            groceryQueue.Enqueue("Mike");
+            Console.WriteLine($@"- Mike came at {DateTime.Now.ToLongTimeString()}.");
             Thread.Sleep(1000);
-            Console.WriteLine($@"- {groceryQueue.Enqueue("Lisa")} came at {DateTime.Now.ToLongTimeString()}.");
+            groceryQueue.Enqueue("Lisa");
+            Console.WriteLine($@"- Lisa came at {DateTime.Now.ToLongTimeString()}.");
             Console.WriteLine();
 
             Console.WriteLine($"{groceryQueue.Dequeue()} is first in line...");
@@ -67,9 +68,11 @@ namespace DataStructures
 
             var emergencyCalls = new Stack<string>();
 
-            Console.WriteLine($@"- {emergencyCalls.Push("Mike")} has arrived at {DateTime.Now.ToLongTimeString()}!");
+            emergencyCalls.Push("Mike");
+            Console.WriteLine($@"- Mike has arrived at {DateTime.Now.ToLongTimeString()}!");
             Thread.Sleep(1000);
-            Console.WriteLine($@"- {emergencyCalls.Push("Lisa")} has arrived at {DateTime.Now.ToLongTimeString()}!");
+            emergencyCalls.Push("Lisa");
+            Console.WriteLine($@"- Lisa has arrived at {DateTime.Now.ToLongTimeString()}!");
             Console.WriteLine();
 
             Console.WriteLine($"Who's next?\n- {emergencyCalls.Peek()}");
@@ -81,7 +84,14 @@ namespace DataStructures
             Console.WriteLine($"{emergencyCalls.Pop()} can go next.");
             Console.WriteLine($"{emergencyCalls.Count} patients in emergency room.");
 
-            Console.WriteLine($"Who's next?\n- {emergencyCalls.Pop() ?? "Nobody"}");
+            try
+            {
+                Console.WriteLine($"Who's next? - {emergencyCalls.Pop()}");
+            }
+            catch
+            {
+                Console.Write("-\tNobody\n");
+            }
         }
     }
 }
