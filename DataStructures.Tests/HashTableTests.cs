@@ -128,6 +128,7 @@ namespace DataStructures.Tests
             _hashTable[Key] = null;
 
             // assert
+            _hashTable.Contains(Key).ShouldBeFalse();
             _hashTable.Contains(Key2).ShouldBeTrue();
         }
 

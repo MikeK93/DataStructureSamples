@@ -25,7 +25,7 @@ namespace DataStructures.Source.HashTable
 
         public bool Equals(Entry<TKey, TValue> obj)
         {
-            return obj != null &&
+            return !ReferenceEquals(obj, null) &&
                    (!EqualityComparer<TKey>.Default.Equals(Key, default(TKey)) && Key.Equals(obj.Key)) &&
                    (!EqualityComparer<TValue>.Default.Equals(Value, default(TValue)) && Value.Equals(obj.Value));
         }

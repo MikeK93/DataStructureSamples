@@ -181,7 +181,7 @@ namespace DataStructures.Tests
             // assert
             list.AsEnumerable().ShouldBeEqualTo(expected);
         }
-        
+
         #endregion
     }
 }

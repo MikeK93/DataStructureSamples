@@ -21,6 +21,7 @@ namespace DataStructures.LinkedList
             {
                 _head = node;
                 _tale = node;
+                _tale.Next = node;
             }
             else
             {
@@ -90,7 +91,12 @@ namespace DataStructures.LinkedList
                 return;
             }
 
-            if (previous == _tale)
+            if (_head == _tale)
+            {
+                _head = null;
+                _tale = null;
+            }
+            else if (previous == _tale)
             {
                 _head = _head.Next;
                 _tale.Next = _head;
@@ -120,7 +126,7 @@ namespace DataStructures.LinkedList
             {
                 yield break;
             }
-
+            
             var enumerator = _head;
             do
             {
