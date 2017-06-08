@@ -31,6 +31,8 @@ namespace DataStructures.Source.HashTable
             }
             set
             {
+                ValidateForNull(key);
+
                 var bucket = GetBucket(key, _buckets);
                 var entry = bucket.FirstOrDefault(x => x.Key.Equals(key));
                 if (entry == null)
@@ -52,6 +54,8 @@ namespace DataStructures.Source.HashTable
 
         public void Add(TKey key, TValue value)
         {
+            ValidateForNull(key);
+
             var bucket = GetBucket(key, _buckets);
             var entry = bucket.FirstOrDefault(x => x.Key.Equals(key));
             if (entry != null)
@@ -64,7 +68,7 @@ namespace DataStructures.Source.HashTable
 
         public bool TryGet(TKey key, out TValue value)
         {
-            var entry = GetBucket(key, _buckets).FirstOrDefault(x => x.Key.Equals(key));
+            var entry = key != null ? GetBucket(key, _buckets).FirstOrDefault(x => x.Key.Equals(key)) : null;
             if (entry == null)
             {
                 value = default(TValue);
@@ -77,7 +81,7 @@ namespace DataStructures.Source.HashTable
 
         public bool Contains(TKey key)
         {
-            return GetBucket(key, _buckets).Any(entry => entry.Key.Equals(key));
+            return key != null && GetBucket(key, _buckets).Any(entry => entry.Key.Equals(key));
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -103,7 +107,7 @@ namespace DataStructures.Source.HashTable
             {
                 return;
             }
-            
+
             var resizedEntries = new ILinkedList<Entry<TKey, TValue>>[_buckets.Length * 2];
 
             foreach (var entry in _buckets.Where(bucket => bucket != null).SelectMany(entry => entry))
@@ -131,6 +135,14 @@ namespace DataStructures.Source.HashTable
         private static int GetBucketIndex(TKey key, int length)
         {
             return Math.Abs(127 * key.GetHashCode() + 1) % 16908799 % (length - 1);
+        }
+
+        public static void ValidateForNull(TKey key)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
         }
     }
 }

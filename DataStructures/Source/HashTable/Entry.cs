@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 
 namespace DataStructures.Source.HashTable
 {
@@ -6,10 +7,15 @@ namespace DataStructures.Source.HashTable
     {
         public Entry(TKey key, TValue value)
         {
+            if (key == null)
+            {
+                throw new NoNullAllowedException(nameof(key));
+            }
+
             Key = key;
             Value = value;
         }
-
+        
         public TKey Key { get; }
         public TValue Value { get; set; }
 
@@ -26,8 +32,8 @@ namespace DataStructures.Source.HashTable
         public bool Equals(Entry<TKey, TValue> obj)
         {
             return !ReferenceEquals(obj, null) &&
-                   (!EqualityComparer<TKey>.Default.Equals(Key, default(TKey)) && Key.Equals(obj.Key)) &&
-                   (!EqualityComparer<TValue>.Default.Equals(Value, default(TValue)) && Value.Equals(obj.Value));
+                   EqualityComparer<TKey>.Default.Equals(Key, obj.Key) &&
+                   EqualityComparer<TValue>.Default.Equals(Value, obj.Value);
         }
 
         public override int GetHashCode()

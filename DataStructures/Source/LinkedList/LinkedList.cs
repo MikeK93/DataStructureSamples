@@ -15,6 +15,8 @@ namespace DataStructures.LinkedList
 
         public void Add(T item)
         {
+            ValidateForNull(item);
+
             var node = new Node<T>(item, _head);
 
             if (_head == null)
@@ -34,6 +36,8 @@ namespace DataStructures.LinkedList
 
         public void AddAt(int index, T item)
         {
+            ValidateForNull(item);
+
             ValidateIndex(index, Length);
 
             if (index == 0)
@@ -91,26 +95,31 @@ namespace DataStructures.LinkedList
                 return;
             }
 
-            if (_head == _tale)
+            if (ReferenceEquals(previous, _head) && ReferenceEquals(previous, _tale))
             {
                 _head = null;
                 _tale = null;
+                Length--;
+                return;
             }
-            else if (previous == _tale)
+
+            if (ReferenceEquals(previous.Next, _head))
             {
                 _head = _head.Next;
                 _tale.Next = _head;
+                Length--;
+                return;
             }
-            else if (previous.Next.Equals(_tale))
+
+            if (ReferenceEquals(previous.Next, _tale))
             {
                 _tale = previous;
                 _tale.Next = _head;
-            }
-            else
-            {
-                previous.Next = previous.Next.Next;
+                Length--;
+                return;
             }
 
+            previous.Next = previous.Next.Next;
             Length--;
         }
 
@@ -126,7 +135,7 @@ namespace DataStructures.LinkedList
             {
                 yield break;
             }
-            
+
             var enumerator = _head;
             do
             {
@@ -140,6 +149,14 @@ namespace DataStructures.LinkedList
             if (index < 0 || index > Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, $"Index [{index}] must be between [0] and [{maxIndex}].");
+            }
+        }
+
+        private static void ValidateForNull(T item)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
             }
         }
     }

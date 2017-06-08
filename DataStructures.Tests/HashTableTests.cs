@@ -25,14 +25,15 @@ namespace DataStructures.Tests
 
         #region Contains
 
-        [Test]
-        public void Contains_ShouldReturnFalse_WhenElementIsNotInTable()
+        [TestCase(Key)]
+        [TestCase(null)]
+        public void Contains_ShouldReturnFalse_WhenElementIsNotInTable(string notExistingKey)
         {
             // arrange
             _hashTable.Add(Key2, Value2);
 
             // act & assert
-            _hashTable.Contains(Key).ShouldBeFalse();
+            _hashTable.Contains(notExistingKey).ShouldBeFalse();
         }
 
         [Test]
@@ -83,6 +84,13 @@ namespace DataStructures.Tests
 
             // assert
             actual.Message.ShouldBeEqualTo("Duplicated key: [key].");
+        }
+
+        [Test]
+        public void Add_ShouldThrow_WhenAddKeyWithNullValue()
+        {
+            // act & arrange
+            Assert.Throws<ArgumentNullException>(() => _hashTable.Add(null, Value));
         }
 
         #endregion
@@ -156,6 +164,16 @@ namespace DataStructures.Tests
             _hashTable[Key].ShouldBeEqualTo("modified");
         }
 
+        [Test]
+        public void Setter_ShouldThrow_WhenKeyIsNull()
+        {
+            // act & assert
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                _hashTable[null] = Value;
+            });
+        }
+
         #endregion
 
         #region Getter
@@ -174,18 +192,19 @@ namespace DataStructures.Tests
             actual.ShouldBeEqualTo(Value);
         }
 
-        [Test]
-        public void Getter_ShouldThrow_WhenKeyDoesNotExist()
+        [TestCase("invalid key")]
+        [TestCase(null)]
+        public void Getter_ShouldThrow_WhenKeyDoesNotExist(string invalidKey)
         {
             // arrange
             _hashTable.Add(Key, Value);
             _hashTable.Add(Key2, Value2);
 
             // act
-            var actual = Assert.Throws<InvalidOperationException>(() => { var value = _hashTable["invalid key"]; });
+            var actual = Assert.Throws<InvalidOperationException>(() => { var value = _hashTable[invalidKey]; });
 
             // assert
-            actual.Message.ShouldBeEqualTo("Key [invalid key] does not exist in a table.");
+            actual.Message.ShouldBeEqualTo($"Key [{invalidKey}] does not exist in a table.");
         }
 
         #endregion
@@ -206,15 +225,16 @@ namespace DataStructures.Tests
             actual.ShouldBeFalse();
         }
 
-        [Test]
-        public void TryGet_ShouldSetValueToNull_WhenKeyWasNotFound()
+        [TestCase("invalid key")]
+        [TestCase(null)]
+        public void TryGet_ShouldSetValueToNull_WhenKeyWasNotFound(string invalidKey)
         {
             // arrange
             _hashTable.Add(Key, Value);
             _hashTable.Add(Key2, Value2);
 
             // act
-            _hashTable.TryGet("invalid key", out string value);
+            _hashTable.TryGet(invalidKey, out string value);
 
             // assert
             value.ShouldBeNull();
@@ -234,20 +254,21 @@ namespace DataStructures.Tests
             actual.ShouldBeTrue();
         }
 
-        [Test]
-        public void TryGet_ShoudSetOutParameterWithCorrectValue_WhenKeyExists()
+        [TestCase(Key, Value)]
+        [TestCase(null, null)]
+        public void TryGet_ShoudldCorrectlySetValue_WhenKeyExists(string key, string expectedValue)
         {
             // arrange
             _hashTable.Add(Key, Value);
             _hashTable.Add(Key2, Value2);
 
             // act
-            _hashTable.TryGet(Key, out string value);
+            _hashTable.TryGet(key, out string value);
 
             // assert
-            value.ShouldBeEqualTo(Value);
+            value.ShouldBeEqualTo(expectedValue);
         }
-
+        
         #endregion
 
         [Test]
@@ -259,7 +280,8 @@ namespace DataStructures.Tests
                 new Entry<string, string>("key1", "value1"),
                 new Entry<string, string>("key2", "value2"),
                 new Entry<string, string>("key3", "value3"),
-                new Entry<string, string>("key4", "value4")
+                new Entry<string, string>("key4", "value4"),
+                new Entry<string, string>("key5", null)
             };
 
             // act
@@ -268,7 +290,8 @@ namespace DataStructures.Tests
                 { "key1", "value1" },
                 { "key2", "value2" },
                 { "key3", "value3" },
-                { "key4", "value4" }
+                { "key4", "value4" },
+                { "key5", null },
             };
 
             // assert
