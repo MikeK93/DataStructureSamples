@@ -65,17 +65,7 @@ namespace DataStructures.Tests
         #endregion
 
         #region Add
-
-        [Test]
-        public void Add_ShouldThrow_WhenAddNull()
-        {
-            // arrange
-            ILinkedList<string> list = new LinkedList<string>();
-
-            // act & assert
-            Assert.Throws<ArgumentNullException>(() => list.Add(null));
-        }
-
+        
         [Test]
         public void Add_ShouldAddElementToList()
         {
@@ -92,17 +82,7 @@ namespace DataStructures.Tests
         #endregion
 
         #region AddAt
-
-        [Test]
-        public void AddAt_ShouldThrow_WhenAddNull()
-        {
-            // arrange
-            ILinkedList<string> list = new LinkedList<string>();
-
-            // act & assert
-            Assert.Throws<ArgumentNullException>(() => list.AddAt(0, null));
-        }
-
+        
         [Test]
         public void AddAt_ShouldThrow_WhenIndexIsOutOfRange()
         {

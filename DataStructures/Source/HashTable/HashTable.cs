@@ -109,7 +109,7 @@ namespace DataStructures.Source.HashTable
             }
 
             var resizedEntries = new ILinkedList<Entry<TKey, TValue>>[_buckets.Length * 2];
-
+            
             foreach (var entry in _buckets.Where(bucket => bucket != null).SelectMany(entry => entry))
             {
                 var bucket = GetBucket(entry.Key, resizedEntries);

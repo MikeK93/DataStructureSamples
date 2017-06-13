@@ -15,8 +15,6 @@ namespace DataStructures.LinkedList
 
         public void Add(T item)
         {
-            ValidateForNull(item);
-
             var node = new Node<T>(item, _head);
 
             if (_head == null)
@@ -36,8 +34,6 @@ namespace DataStructures.LinkedList
 
         public void AddAt(int index, T item)
         {
-            ValidateForNull(item);
-
             ValidateIndex(index, Length);
 
             if (index == 0)
@@ -95,7 +91,7 @@ namespace DataStructures.LinkedList
                 return;
             }
 
-            if (ReferenceEquals(previous, _head) && ReferenceEquals(previous, _tale))
+            if (ReferenceEquals(_head, _head.Next))
             {
                 _head = null;
                 _tale = null;
@@ -149,14 +145,6 @@ namespace DataStructures.LinkedList
             if (index < 0 || index > Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, $"Index [{index}] must be between [0] and [{maxIndex}].");
-            }
-        }
-
-        private static void ValidateForNull(T item)
-        {
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
             }
         }
     }
