@@ -65,7 +65,7 @@ namespace DataStructures.Tests
         #endregion
 
         #region Add
-
+        
         [Test]
         public void Add_ShouldAddElementToList()
         {
@@ -82,7 +82,7 @@ namespace DataStructures.Tests
         #endregion
 
         #region AddAt
-
+        
         [Test]
         public void AddAt_ShouldThrow_WhenIndexIsOutOfRange()
         {
@@ -131,7 +131,10 @@ namespace DataStructures.Tests
             // arrange
             ILinkedList<int> list = new LinkedList<int> { 1, 2 };
 
-            // act & assert
+            // act 
+            list.Remove(100); 
+
+            // assert
             list.Length.ShouldBeEqualTo(2);
         }
         
@@ -149,7 +152,20 @@ namespace DataStructures.Tests
             // assert
             list.AsEnumerable().ShouldBeEqualTo(expected);
         }
-        
+
+        [Test]
+        public void Remove_ShouldRemoveElement_WhenOnlyOneElementInList()
+        {
+            // arrange
+            ILinkedList<int> list = new LinkedList<int> { 1 };
+
+            // act
+            list.Remove(1);
+            
+            // assert
+            list.Length.ShouldBeEqualTo(0);
+        }
+
         #endregion
 
         #region RemoveAt
@@ -181,7 +197,20 @@ namespace DataStructures.Tests
             // assert
             list.AsEnumerable().ShouldBeEqualTo(expected);
         }
-        
+
+        [Test]
+        public void RemoveAt_ShouldRemoveElement_WhenOnlyOneElementInList()
+        {
+            // arrange
+            ILinkedList<int> list = new LinkedList<int> { 1 };
+
+            // act 
+            list.RemoveAt(0);
+
+            // assert
+            list.Length.ShouldBeEqualTo(0);
+        }
+
         #endregion
     }
 }

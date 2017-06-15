@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DataStructures.LinkedList
+﻿namespace DataStructures.LinkedList
 {
     public class Node<T>
     {
@@ -15,11 +13,5 @@ namespace DataStructures.LinkedList
         public T Item { get; set; }
 
         public Node<T> Next { get; set; }
-
-        public override string ToString()
-        {
-            var nextValue = Next == null ? "NULL" : Convert.ToString(Next.Item);
-            return $"{Convert.ToString(Item)} -> {nextValue}";
-        }
     }
 }

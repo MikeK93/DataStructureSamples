@@ -21,6 +21,7 @@ namespace DataStructures.LinkedList
             {
                 _head = node;
                 _tale = node;
+                _tale.Next = node;
             }
             else
             {
@@ -90,21 +91,31 @@ namespace DataStructures.LinkedList
                 return;
             }
 
-            if (previous == _tale)
+            if (ReferenceEquals(_head, _head.Next))
+            {
+                _head = null;
+                _tale = null;
+                Length--;
+                return;
+            }
+
+            if (ReferenceEquals(previous.Next, _head))
             {
                 _head = _head.Next;
                 _tale.Next = _head;
+                Length--;
+                return;
             }
-            else if (previous.Next.Equals(_tale))
+
+            if (ReferenceEquals(previous.Next, _tale))
             {
                 _tale = previous;
                 _tale.Next = _head;
-            }
-            else
-            {
-                previous.Next = previous.Next.Next;
+                Length--;
+                return;
             }
 
+            previous.Next = previous.Next.Next;
             Length--;
         }
 

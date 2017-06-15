@@ -47,11 +47,11 @@
     <Compile Include="Contracts\IQueue.cs" />
     <Compile Include="Contracts\IStack.cs" />
     <Compile Include="Source\HashTable\HashTable.cs" />
-    <Compile Include="Source\HashTable\Node.cs" />
+    <Compile Include="Source\HashTable\Entry.cs" />
     <Compile Include="Source\LinkedList\LinkedList.cs" />
-    <Compile Include="Source\LinkedList\Node.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\LinkedList\Node.cs" />
     <Compile Include="Source\Queue.cs" />
     <Compile Include="Source\Stack.cs" />
   </ItemGroup>
